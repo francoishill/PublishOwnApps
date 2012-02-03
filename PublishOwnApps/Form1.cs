@@ -55,38 +55,45 @@ namespace PublishOwnApps
 				action();
 		}
 
+		private bool InitialTopmost = false;
 		private void buttonPublishNow_Click(object sender, EventArgs e)
 		{
-			if (comboBoxProjectName.Text.Trim().Length == 0)
-				UserMessages.ShowWarningMessage("Please select a project name first");
-			else
+			InitialTopmost = this.TopMost;
+			this.TopMost = false;
+			using (new ThreadingInterop.WaitIndicator())
 			{
-				if (radioButtonLocal.Checked)
-				{
-					string tmpNoUseVersionStr;
-					VisualStudioInterop.PerformPublish(
-						textfeedbackSenderObject: this,
-						projName: comboBoxProjectName.Text,
-						versionString: out tmpNoUseVersionStr,
-						HasPlugins: checkBoxHasPlugins.Checked,
-						AutomaticallyUpdateRevision: checkBoxUpdateRevision.Checked,
-						WriteIntoRegistryForWindowsAutostartup: checkBoxAutoStartupWithWindows.Checked,
-						textFeedbackEvent: textFeedbackEvent);
-				}
-				else if (radioButtonOnline.Checked)
-				{
-					VisualStudioInterop.PerformPublishOnline(
-							 textfeedbackSenderObject: this,
-							 projName: comboBoxProjectName.Text,
-							 HasPlugins: checkBoxHasPlugins.Checked,
-							 AutomaticallyUpdateRevision: checkBoxUpdateRevision.Checked,
-							 WriteIntoRegistryForWindowsAutostartup: checkBoxAutoStartupWithWindows.Checked,
-							 textFeedbackEvent: textFeedbackEvent,
-							 progressChanged: progressChangedEvent);
-				}
+				if (comboBoxProjectName.Text.Trim().Length == 0)
+					UserMessages.ShowWarningMessage("Please select a project name first");
 				else
-					UserMessages.ShowWarningMessage("Please choose either local or online");
+				{
+					if (radioButtonLocal.Checked)
+					{
+						string tmpNoUseVersionStr;
+						VisualStudioInterop.PerformPublish(
+							textfeedbackSenderObject: this,
+							projName: comboBoxProjectName.Text,
+							versionString: out tmpNoUseVersionStr,
+							HasPlugins: checkBoxHasPlugins.Checked,
+							AutomaticallyUpdateRevision: checkBoxUpdateRevision.Checked,
+							WriteIntoRegistryForWindowsAutostartup: checkBoxAutoStartupWithWindows.Checked,
+							textFeedbackEvent: textFeedbackEvent);
+					}
+					else if (radioButtonOnline.Checked)
+					{
+						VisualStudioInterop.PerformPublishOnline(
+								 textfeedbackSenderObject: this,
+								 projName: comboBoxProjectName.Text,
+								 HasPlugins: checkBoxHasPlugins.Checked,
+								 AutomaticallyUpdateRevision: checkBoxUpdateRevision.Checked,
+								 WriteIntoRegistryForWindowsAutostartup: checkBoxAutoStartupWithWindows.Checked,
+								 textFeedbackEvent: textFeedbackEvent,
+								 progressChanged: progressChangedEvent);
+					}
+					else
+						UserMessages.ShowWarningMessage("Please choose either local or online");
+				}
 			}
+			this.TopMost = InitialTopmost;
 		}
 
 		private void comboBoxProjectName_SelectedIndexChanged(object sender, EventArgs e)
