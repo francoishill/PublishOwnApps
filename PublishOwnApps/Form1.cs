@@ -13,7 +13,7 @@ namespace PublishOwnApps
 	public partial class Form1 : Form
 	{
 		TextFeedbackEventHandler textFeedbackEvent;
-		ProgressChangedEventHandler progressChangedEvent;		
+		ProgressChangedEventHandler progressChangedEvent;
 
 		public Form1()
 		{
@@ -25,18 +25,34 @@ namespace PublishOwnApps
 
 		private void OnTextFeedbackEvent(object sender, TextFeedbackEventArgs e)
 		{
-			textBoxMessages.Text += (textBoxMessages.Text.Trim().Length > 0 ? Environment.NewLine : "") + e.FeedbackText;
-			textBoxMessages.SelectionStart = textBoxMessages.Text.Length;
-			textBoxMessages.SelectionLength = 0;
-			textBoxMessages.ScrollToCaret();
+			Action action = new Action(
+				delegate
+				{
+					textBoxMessages.Text += (textBoxMessages.Text.Trim().Length > 0 ? Environment.NewLine : "") + e.FeedbackText;
+					textBoxMessages.SelectionStart = textBoxMessages.Text.Length;
+					textBoxMessages.SelectionLength = 0;
+					textBoxMessages.ScrollToCaret();
+				});
+			if (this.InvokeRequired)
+				this.Invoke(action);
+			else
+				action();
 		}
 
 		private void OnProgressChangedEvent(object sender, ProgressChangedEventArgs e)
 		{
-			progressBar.Maximum = e.MaximumValue;
-			progressBar.Value = e.CurrentValue;
-			if (progressBar.Maximum == progressBar.Value)
-				progressBar.Value = 0;
+			Action action = new Action(
+				delegate
+				{
+					progressBar.Maximum = e.MaximumValue;
+					progressBar.Value = e.CurrentValue;
+					if (progressBar.Maximum == progressBar.Value)
+						progressBar.Value = 0;
+				});
+			if (this.InvokeRequired)
+				this.Invoke(action);
+			else
+				action();
 		}
 
 		private void buttonPublishNow_Click(object sender, EventArgs e)
@@ -89,6 +105,12 @@ namespace PublishOwnApps
 				checkBoxHasPlugins.Checked = true;
 				//checkBoxUpdateRevision.Checked = true;
 				checkBoxAutoStartupWithWindows.Checked = true;
+			}
+			else if (comboBoxProjectName.SelectedItem.ToString().ToLower() == "PublishOwnApps".ToLower())
+			{
+				checkBoxHasPlugins.Checked = false;
+				//checkBoxUpdateRevision.Checked = true;
+				checkBoxAutoStartupWithWindows.Checked = false;
 			}
 		}
 

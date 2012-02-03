@@ -120,7 +120,8 @@
 			this.comboBoxProjectName.FormattingEnabled = true;
 			this.comboBoxProjectName.Items.AddRange(new object[] {
             "MonitorSystem",
-            "QuickAccess"});
+            "QuickAccess",
+            "PublishOwnApps"});
 			this.comboBoxProjectName.Location = new System.Drawing.Point(12, 25);
 			this.comboBoxProjectName.Name = "comboBoxProjectName";
 			this.comboBoxProjectName.Size = new System.Drawing.Size(188, 28);
