@@ -36,7 +36,10 @@
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.checkBoxUpdateRevision = new System.Windows.Forms.CheckBox();
 			this.checkBoxAutoStartupWithWindows = new System.Windows.Forms.CheckBox();
-			this.comboBox1 = new System.Windows.Forms.ComboBox();
+			this.comboBoxProjectName = new System.Windows.Forms.ComboBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.progressBar = new System.Windows.Forms.ProgressBar();
+			this.textBoxMessages = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// radioButtonLocal
@@ -44,7 +47,7 @@
 			this.radioButtonLocal.AutoSize = true;
 			this.radioButtonLocal.Checked = true;
 			this.radioButtonLocal.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.radioButtonLocal.Location = new System.Drawing.Point(11, 63);
+			this.radioButtonLocal.Location = new System.Drawing.Point(12, 78);
 			this.radioButtonLocal.Name = "radioButtonLocal";
 			this.radioButtonLocal.Size = new System.Drawing.Size(51, 17);
 			this.radioButtonLocal.TabIndex = 0;
@@ -57,28 +60,30 @@
 			// 
 			this.radioButtonOnline.AutoSize = true;
 			this.radioButtonOnline.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.radioButtonOnline.Location = new System.Drawing.Point(86, 63);
+			this.radioButtonOnline.Location = new System.Drawing.Point(87, 78);
 			this.radioButtonOnline.Name = "radioButtonOnline";
 			this.radioButtonOnline.Size = new System.Drawing.Size(55, 17);
 			this.radioButtonOnline.TabIndex = 1;
 			this.radioButtonOnline.Text = "&Online";
 			this.toolTip1.SetToolTip(this.radioButtonOnline, "The type of publish to be performed");
 			this.radioButtonOnline.UseVisualStyleBackColor = true;
+			this.radioButtonOnline.CheckedChanged += new System.EventHandler(this.radioButtonOnline_CheckedChanged);
 			// 
 			// buttonPublishNow
 			// 
 			this.buttonPublishNow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.buttonPublishNow.Location = new System.Drawing.Point(149, 223);
+			this.buttonPublishNow.Location = new System.Drawing.Point(396, 234);
 			this.buttonPublishNow.Name = "buttonPublishNow";
 			this.buttonPublishNow.Size = new System.Drawing.Size(75, 23);
 			this.buttonPublishNow.TabIndex = 2;
 			this.buttonPublishNow.Text = "&Publish now";
 			this.buttonPublishNow.UseVisualStyleBackColor = true;
+			this.buttonPublishNow.Click += new System.EventHandler(this.buttonPublishNow_Click);
 			// 
 			// checkBoxHasPlugins
 			// 
 			this.checkBoxHasPlugins.AutoSize = true;
-			this.checkBoxHasPlugins.Location = new System.Drawing.Point(12, 97);
+			this.checkBoxHasPlugins.Location = new System.Drawing.Point(13, 112);
 			this.checkBoxHasPlugins.Name = "checkBoxHasPlugins";
 			this.checkBoxHasPlugins.Size = new System.Drawing.Size(81, 17);
 			this.checkBoxHasPlugins.TabIndex = 3;
@@ -89,7 +94,7 @@
 			// checkBoxUpdateRevision
 			// 
 			this.checkBoxUpdateRevision.AutoSize = true;
-			this.checkBoxUpdateRevision.Location = new System.Drawing.Point(11, 129);
+			this.checkBoxUpdateRevision.Location = new System.Drawing.Point(12, 144);
 			this.checkBoxUpdateRevision.Name = "checkBoxUpdateRevision";
 			this.checkBoxUpdateRevision.Size = new System.Drawing.Size(100, 17);
 			this.checkBoxUpdateRevision.TabIndex = 4;
@@ -100,7 +105,7 @@
 			// checkBoxAutoStartupWithWindows
 			// 
 			this.checkBoxAutoStartupWithWindows.AutoSize = true;
-			this.checkBoxAutoStartupWithWindows.Location = new System.Drawing.Point(11, 165);
+			this.checkBoxAutoStartupWithWindows.Location = new System.Drawing.Point(12, 180);
 			this.checkBoxAutoStartupWithWindows.Name = "checkBoxAutoStartupWithWindows";
 			this.checkBoxAutoStartupWithWindows.Size = new System.Drawing.Size(100, 17);
 			this.checkBoxAutoStartupWithWindows.TabIndex = 5;
@@ -108,37 +113,72 @@
 			this.toolTip1.SetToolTip(this.checkBoxAutoStartupWithWindows, "The application must be placed in the registry to startup with windows");
 			this.checkBoxAutoStartupWithWindows.UseVisualStyleBackColor = true;
 			// 
-			// comboBox1
+			// comboBoxProjectName
 			// 
-			this.comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.comboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.comboBox1.ForeColor = System.Drawing.Color.Green;
-			this.comboBox1.FormattingEnabled = true;
-			this.comboBox1.Items.AddRange(new object[] {
+			this.comboBoxProjectName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.comboBoxProjectName.ForeColor = System.Drawing.Color.Green;
+			this.comboBoxProjectName.FormattingEnabled = true;
+			this.comboBoxProjectName.Items.AddRange(new object[] {
             "MonitorSystem",
             "QuickAccess"});
-			this.comboBox1.Location = new System.Drawing.Point(13, 13);
-			this.comboBox1.Name = "comboBox1";
-			this.comboBox1.Size = new System.Drawing.Size(211, 28);
-			this.comboBox1.TabIndex = 6;
+			this.comboBoxProjectName.Location = new System.Drawing.Point(12, 25);
+			this.comboBoxProjectName.Name = "comboBoxProjectName";
+			this.comboBoxProjectName.Size = new System.Drawing.Size(188, 28);
+			this.comboBoxProjectName.TabIndex = 6;
+			this.comboBoxProjectName.SelectedIndexChanged += new System.EventHandler(this.comboBoxProjectName_SelectedIndexChanged);
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.ForeColor = System.Drawing.Color.SteelBlue;
+			this.label1.Location = new System.Drawing.Point(9, 9);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(72, 13);
+			this.label1.TabIndex = 7;
+			this.label1.Text = "Project name:";
+			// 
+			// progressBar
+			// 
+			this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.progressBar.Location = new System.Drawing.Point(225, 218);
+			this.progressBar.Name = "progressBar";
+			this.progressBar.Size = new System.Drawing.Size(246, 10);
+			this.progressBar.TabIndex = 8;
+			this.progressBar.Visible = false;
+			// 
+			// textBoxMessages
+			// 
+			this.textBoxMessages.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.textBoxMessages.Location = new System.Drawing.Point(225, 25);
+			this.textBoxMessages.Multiline = true;
+			this.textBoxMessages.Name = "textBoxMessages";
+			this.textBoxMessages.ReadOnly = true;
+			this.textBoxMessages.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+			this.textBoxMessages.Size = new System.Drawing.Size(246, 187);
+			this.textBoxMessages.TabIndex = 9;
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(236, 258);
-			this.Controls.Add(this.comboBox1);
+			this.ClientSize = new System.Drawing.Size(483, 269);
+			this.Controls.Add(this.textBoxMessages);
+			this.Controls.Add(this.progressBar);
+			this.Controls.Add(this.label1);
+			this.Controls.Add(this.comboBoxProjectName);
 			this.Controls.Add(this.checkBoxAutoStartupWithWindows);
 			this.Controls.Add(this.checkBoxUpdateRevision);
 			this.Controls.Add(this.radioButtonLocal);
 			this.Controls.Add(this.radioButtonOnline);
 			this.Controls.Add(this.checkBoxHasPlugins);
 			this.Controls.Add(this.buttonPublishNow);
-			this.MinimizeBox = false;
+			this.MaximizeBox = false;
 			this.Name = "Form1";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Form1";
+			this.Text = "Publish application";
 			this.TopMost = true;
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -154,7 +194,10 @@
 		private System.Windows.Forms.ToolTip toolTip1;
 		private System.Windows.Forms.CheckBox checkBoxUpdateRevision;
 		private System.Windows.Forms.CheckBox checkBoxAutoStartupWithWindows;
-		private System.Windows.Forms.ComboBox comboBox1;
+		private System.Windows.Forms.ComboBox comboBoxProjectName;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.ProgressBar progressBar;
+		private System.Windows.Forms.TextBox textBoxMessages;
 	}
 }
 
