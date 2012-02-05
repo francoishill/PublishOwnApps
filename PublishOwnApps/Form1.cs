@@ -55,13 +55,16 @@ namespace PublishOwnApps
 				action();
 		}
 
+		private ThreadingInterop.WaitIndicator currentProgressBar = null;
 		private bool InitialTopmost = false;
 		private void buttonPublishNow_Click(object sender, EventArgs e)
 		{
 			InitialTopmost = this.TopMost;
 			this.TopMost = false;
-			using (new ThreadingInterop.WaitIndicator())
+			using (ThreadingInterop.WaitIndicator wi = new ThreadingInterop.WaitIndicator())
 			{
+				currentProgressBar = wi;
+
 				if (comboBoxProjectName.Text.Trim().Length == 0)
 					UserMessages.ShowWarningMessage("Please select a project name first");
 				else
@@ -92,6 +95,7 @@ namespace PublishOwnApps
 					else
 						UserMessages.ShowWarningMessage("Please choose either local or online");
 				}
+				currentProgressBar = null;
 			}
 			this.TopMost = InitialTopmost;
 		}
@@ -124,6 +128,30 @@ namespace PublishOwnApps
 		private void radioButtonOnline_CheckedChanged(object sender, EventArgs e)
 		{
 			progressBar.Visible = radioButtonOnline.Checked;
+		}
+
+		private void Form1_LocationChanged(object sender, EventArgs e)
+		{
+			UpdateProgressBarPosition();
+		}
+
+		private void Form1_SizeChanged(object sender, EventArgs e)
+		{
+			UpdateProgressBarPosition();
+		}
+
+		private void UpdateProgressBarPosition()
+		{
+			if (currentProgressBar != null)
+			{
+				try
+				{
+					currentProgressBar.progressForm.Location = new Point(
+						this.Left + (this.Width / 2) - (currentProgressBar.progressForm.Width / 2),
+						this.Top + (this.Height / 2) - (currentProgressBar.progressForm.Height / 2));
+				}
+				catch { }
+			}
 		}
 	}
 }

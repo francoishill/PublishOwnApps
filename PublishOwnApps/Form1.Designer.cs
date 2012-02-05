@@ -181,6 +181,8 @@
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Publish application";
 			this.TopMost = true;
+			this.LocationChanged += new System.EventHandler(this.Form1_LocationChanged);
+			this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
