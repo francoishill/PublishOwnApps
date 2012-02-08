@@ -64,6 +64,7 @@ namespace PublishOwnApps
 			using (ThreadingInterop.WaitIndicator wi = new ThreadingInterop.WaitIndicator())
 			{
 				currentProgressBar = wi;
+				UpdateProgressBarPosition();
 
 				if (comboBoxProjectName.Text.Trim().Length == 0)
 					UserMessages.ShowWarningMessage("Please select a project name first");
