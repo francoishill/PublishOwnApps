@@ -29,6 +29,7 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
 			this.radioButtonLocal = new System.Windows.Forms.RadioButton();
 			this.radioButtonOnline = new System.Windows.Forms.RadioButton();
 			this.buttonPublishNow = new System.Windows.Forms.Button();
@@ -121,7 +122,8 @@
 			this.comboBoxProjectName.Items.AddRange(new object[] {
             "MonitorSystem",
             "QuickAccess",
-            "PublishOwnApps"});
+            "PublishOwnApps",
+            "GenericTextFunctions"});
 			this.comboBoxProjectName.Location = new System.Drawing.Point(12, 25);
 			this.comboBoxProjectName.Name = "comboBoxProjectName";
 			this.comboBoxProjectName.Size = new System.Drawing.Size(188, 28);
@@ -176,11 +178,13 @@
 			this.Controls.Add(this.radioButtonOnline);
 			this.Controls.Add(this.checkBoxHasPlugins);
 			this.Controls.Add(this.buttonPublishNow);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.Name = "Form1";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Publish application";
 			this.TopMost = true;
+			this.Shown += new System.EventHandler(this.Form1_Shown);
 			this.LocationChanged += new System.EventHandler(this.Form1_LocationChanged);
 			this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
 			this.ResumeLayout(false);

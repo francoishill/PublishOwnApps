@@ -154,5 +154,13 @@ namespace PublishOwnApps
 				catch { }
 			}
 		}
+
+		private void Form1_Shown(object sender, EventArgs e)
+		{
+			this.Cursor = Cursors.Default;
+			comboBoxProjectName.DroppedDown = true;
+			this.Cursor = Cursors.Default;
+			Application.DoEvents();
+		}
 	}
 }
