@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SharedClasses;
 
 namespace PublishOwnApps
 {
@@ -21,6 +22,10 @@ namespace PublishOwnApps
 
 			textFeedbackEvent += new TextFeedbackEventHandler(OnTextFeedbackEvent);
 			progressChangedEvent += new ProgressChangedEventHandler(OnProgressChangedEvent);
+
+			comboBoxProjectName.Items.Clear();
+			foreach (string item in GlobalSettings.PublishSettings.Instance.ListedApplicationNames.Split('|'))
+				comboBoxProjectName.Items.Add(item);
 		}
 
 		private void OnTextFeedbackEvent(object sender, TextFeedbackEventArgs e)

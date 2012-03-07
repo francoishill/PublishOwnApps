@@ -119,13 +119,6 @@
 			this.comboBoxProjectName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.comboBoxProjectName.ForeColor = System.Drawing.Color.Green;
 			this.comboBoxProjectName.FormattingEnabled = true;
-			this.comboBoxProjectName.Items.AddRange(new object[] {
-            "MonitorSystem",
-            "QuickAccess",
-            "PublishOwnApps",
-            "GenericTextFunctions",
-			"AForgeMotionDetector",
-			"TestingMonitorSubversion"});
 			this.comboBoxProjectName.Location = new System.Drawing.Point(12, 25);
 			this.comboBoxProjectName.Name = "comboBoxProjectName";
 			this.comboBoxProjectName.Size = new System.Drawing.Size(188, 28);
