@@ -20,12 +20,28 @@ namespace PublishOwnApps
 		{
 			InitializeComponent();
 
+			WindowMessagesInterop.InitializeClientMessages();
+
 			textFeedbackEvent += new TextFeedbackEventHandler(OnTextFeedbackEvent);
 			progressChangedEvent += new ProgressChangedEventHandler(OnProgressChangedEvent);
 
 			comboBoxProjectName.Items.Clear();
 			foreach (string item in GlobalSettings.PublishSettings.Instance.ListedApplicationNames.Split('|'))
 				comboBoxProjectName.Items.Add(item);
+		}
+
+		protected override void WndProc(ref Message m)
+		{
+			WindowMessagesInterop.MessageTypes mt;
+			WindowMessagesInterop.ClientHandleMessage(m.Msg, m.WParam, m.LParam, out mt);
+			if (mt == WindowMessagesInterop.MessageTypes.Show)
+				this.Show();
+			else if (mt == WindowMessagesInterop.MessageTypes.Hide)
+				this.Hide();
+			else if (mt == WindowMessagesInterop.MessageTypes.Close)
+				this.Close();
+			else
+				base.WndProc(ref m);
 		}
 
 		private void OnTextFeedbackEvent(object sender, TextFeedbackEventArgs e)
