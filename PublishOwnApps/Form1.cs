@@ -27,7 +27,14 @@ namespace PublishOwnApps
 
 			comboBoxProjectName.Items.Clear();
 			foreach (string item in GlobalSettings.PublishSettings.Instance.ListedApplicationNames.Split('|').OrderBy(s => s))
-				comboBoxProjectName.Items.Add(item);
+				comboBoxProjectName.Items.Add(
+					new ApplicationToPublish(
+						item,
+						HasPlugins: item.Equals("QuickAccess", StringComparison.InvariantCultureIgnoreCase),
+						UpdateRevisionNumber: false,
+						AutostartWithWindows: item.Equals(StringComparison.InvariantCultureIgnoreCase,
+							"ApplicationManager", "MonitorSystem", "QuickAccess", "StartupTodoManager", "TestingMonitorSubversion")
+						));
 		}
 
 		protected override void WndProc(ref Message m)
@@ -42,6 +49,12 @@ namespace PublishOwnApps
 				this.Close();
 			else
 				base.WndProc(ref m);
+		}
+
+		protected override void OnHandleCreated(EventArgs e)
+		{
+			StylingInterop.SetTreeviewVistaStyle(treeViewPublishList);
+			base.OnHandleCreated(e);
 		}
 
 		private void OnTextFeedbackEvent(object sender, TextFeedbackEventArgs e)
@@ -80,6 +93,30 @@ namespace PublishOwnApps
 		private bool InitialTopmost = false;
 		private void buttonPublishNow_Click(object sender, EventArgs e)
 		{
+			if (comboBoxProjectName.Text.Trim().Length == 0)
+				UserMessages.ShowWarningMessage("Please select a project name first.");
+			else
+			{
+				if (comboBoxProjectName.SelectedIndex == -1)
+					PublishApplication(new ApplicationToPublish(comboBoxProjectName.Text, checkBoxHasPlugins.Checked, checkBoxUpdateRevision.Checked, checkBoxAutoStartupWithWindows.Checked));
+				else
+					PublishApplication(comboBoxProjectName.SelectedItem as ApplicationToPublish);
+			}
+		}
+
+		private void buttonPublishList_Click(object sender, EventArgs e)
+		{
+			if (comboBoxProjectName.SelectedIndex != -1)
+				UserMessages.ShowInfoMessage("There is still an item in the combobox, click to add it to the list or clear it before continuing.");
+			else
+			{
+				foreach (TreeNode node in treeViewPublishList.Nodes)
+					PublishApplication(node.Tag as ApplicationToPublish);
+			}
+		}
+
+		private void PublishApplication(ApplicationToPublish apptoPublish)
+		{
 			InitialTopmost = this.TopMost;
 			this.TopMost = false;
 			using (ThreadingInterop.WaitIndicator wi = new ThreadingInterop.WaitIndicator())
@@ -87,36 +124,32 @@ namespace PublishOwnApps
 				currentProgressBar = wi;
 				UpdateProgressBarPosition();
 
-				if (comboBoxProjectName.Text.Trim().Length == 0)
-					UserMessages.ShowWarningMessage("Please select a project name first");
-				else
+				if (radioButtonLocal.Checked)
 				{
-					if (radioButtonLocal.Checked)
-					{
-						string tmpNoUseVersionStr;
-						VisualStudioInterop.PerformPublish(
-							textfeedbackSenderObject: this,
-							projName: comboBoxProjectName.Text,
-							versionString: out tmpNoUseVersionStr,
-							HasPlugins: checkBoxHasPlugins.Checked,
-							AutomaticallyUpdateRevision: checkBoxUpdateRevision.Checked,
-							WriteIntoRegistryForWindowsAutostartup: checkBoxAutoStartupWithWindows.Checked,
-							textFeedbackEvent: textFeedbackEvent);
-					}
-					else if (radioButtonOnline.Checked)
-					{
-						VisualStudioInterop.PerformPublishOnline(
-								 textfeedbackSenderObject: this,
-								 projName: comboBoxProjectName.Text,
-								 HasPlugins: checkBoxHasPlugins.Checked,
-								 AutomaticallyUpdateRevision: checkBoxUpdateRevision.Checked,
-								 WriteIntoRegistryForWindowsAutostartup: checkBoxAutoStartupWithWindows.Checked,
-								 textFeedbackEvent: textFeedbackEvent,
-								 progressChanged: progressChangedEvent);
-					}
-					else
-						UserMessages.ShowWarningMessage("Please choose either local or online");
+					string tmpNoUseVersionStr;
+					VisualStudioInterop.PerformPublish(
+						textfeedbackSenderObject: this,
+						projName: apptoPublish.ApplicationName,//comboBoxProjectName.Text,
+						versionString: out tmpNoUseVersionStr,
+						HasPlugins: apptoPublish.HasPlugins,//checkBoxHasPlugins.Checked,
+						AutomaticallyUpdateRevision: apptoPublish.UpdateRevisionNumber,//checkBoxUpdateRevision.Checked,
+						WriteIntoRegistryForWindowsAutostartup: apptoPublish.AutostartWithWindows,//checkBoxAutoStartupWithWindows.Checked,
+						textFeedbackEvent: textFeedbackEvent);
 				}
+				else if (radioButtonOnline.Checked)
+				{
+					VisualStudioInterop.PerformPublishOnline(
+							 textfeedbackSenderObject: this,
+							 projName: apptoPublish.ApplicationName,//comboBoxProjectName.Text,
+							 HasPlugins: apptoPublish.HasPlugins,//checkBoxHasPlugins.Checked,
+							 AutomaticallyUpdateRevision: apptoPublish.UpdateRevisionNumber,//checkBoxUpdateRevision.Checked,
+							 WriteIntoRegistryForWindowsAutostartup: apptoPublish.AutostartWithWindows,//checkBoxAutoStartupWithWindows.Checked,
+							 textFeedbackEvent: textFeedbackEvent,
+							 progressChanged: progressChangedEvent);
+				}
+				else
+					UserMessages.ShowWarningMessage("Please choose either local or online.");
+
 				currentProgressBar = null;
 			}
 			this.TopMost = InitialTopmost;
@@ -127,24 +160,19 @@ namespace PublishOwnApps
 			if (comboBoxProjectName.SelectedIndex == -1)
 				return;
 
-			if (comboBoxProjectName.SelectedItem.ToString().ToLower() == "MonitorSystem".ToLower())
-			{
-				checkBoxHasPlugins.Checked = false;
-				//checkBoxUpdateRevision.Checked = true;
-				checkBoxAutoStartupWithWindows.Checked = true;
-			}
-			else if (comboBoxProjectName.SelectedItem.ToString().ToLower() == "QuickAccess".ToLower())
-			{
-				checkBoxHasPlugins.Checked = true;
-				//checkBoxUpdateRevision.Checked = true;
-				checkBoxAutoStartupWithWindows.Checked = true;
-			}
-			else if (comboBoxProjectName.SelectedItem.ToString().ToLower() == "PublishOwnApps".ToLower())
-			{
-				checkBoxHasPlugins.Checked = false;
-				//checkBoxUpdateRevision.Checked = true;
-				checkBoxAutoStartupWithWindows.Checked = false;
-			}
+			checkBoxHasPlugins.Checked = (comboBoxProjectName.SelectedItem as ApplicationToPublish).HasPlugins;
+			checkBoxUpdateRevision.Checked = (comboBoxProjectName.SelectedItem as ApplicationToPublish).UpdateRevisionNumber;
+			checkBoxAutoStartupWithWindows.Checked = (comboBoxProjectName.SelectedItem as ApplicationToPublish).AutostartWithWindows;
+		}
+
+		private void comboBoxProjectName_TextChanged(object sender, EventArgs e)
+		{
+			//checkBoxHasPlugins.Enabled = comboBoxProjectName.SelectedIndex != -1;
+			//checkBoxUpdateRevision.Enabled = comboBoxProjectName.SelectedIndex != -1;
+			//checkBoxAutoStartupWithWindows.Enabled = comboBoxProjectName.SelectedIndex != -1;
+			checkBoxHasPlugins.Checked = false;
+			checkBoxUpdateRevision.Checked = false;
+			checkBoxAutoStartupWithWindows.Checked = false;
 		}
 
 		private void radioButtonOnline_CheckedChanged(object sender, EventArgs e)
@@ -182,6 +210,56 @@ namespace PublishOwnApps
 			comboBoxProjectName.DroppedDown = true;
 			this.Cursor = Cursors.Default;
 			Application.DoEvents();
+		}
+
+		private void linkLabelAddToPublishList_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			string appname = comboBoxProjectName.Text;
+
+			if (appname.Trim().Length == 0)//comboBoxProjectName.SelectedIndex == -1)
+				UserMessages.ShowWarningMessage("Please select an item first or type its name.");
+			else if (treeViewPublishList.Nodes.ContainsKey(appname))
+				UserMessages.ShowWarningMessage("Cannot have duplicates in the publish list.");
+			else
+			{
+				TreeNode newNode = treeViewPublishList.Nodes.Add(appname, appname);
+				newNode.Tag =
+					comboBoxProjectName.SelectedIndex == -1
+					? new ApplicationToPublish(appname, checkBoxHasPlugins.Checked, checkBoxUpdateRevision.Checked, checkBoxAutoStartupWithWindows.Checked)
+					: comboBoxProjectName.SelectedItem as ApplicationToPublish;
+				comboBoxProjectName.SelectedIndex = -1;
+			}
+		}
+
+		private void treeViewPublishList_AfterSelect(object sender, TreeViewEventArgs e)
+		{
+			if (treeViewPublishList.SelectedNode == null)
+				return;
+			ApplicationToPublish app = treeViewPublishList.SelectedNode.Tag as ApplicationToPublish;
+			if (app == null)
+				return;
+			checkBoxHasPlugins.Checked = app.HasPlugins;
+			checkBoxUpdateRevision.Checked = app.UpdateRevisionNumber;
+			checkBoxAutoStartupWithWindows.Checked = app.AutostartWithWindows;
+		}
+	}
+
+	public class ApplicationToPublish
+	{
+		public string ApplicationName;
+		public bool HasPlugins;
+		public bool UpdateRevisionNumber;
+		public bool AutostartWithWindows;
+		public ApplicationToPublish(string ApplicationName, bool HasPlugins, bool UpdateRevisionNumber, bool AutostartWithWindows)
+		{
+			this.ApplicationName = ApplicationName;
+			this.HasPlugins = HasPlugins;
+			this.UpdateRevisionNumber = UpdateRevisionNumber;
+			this.AutostartWithWindows = AutostartWithWindows;
+		}
+		public override string ToString()
+		{
+			return ApplicationName;
 		}
 	}
 }

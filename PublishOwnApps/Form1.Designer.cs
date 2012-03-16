@@ -41,14 +41,18 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.progressBar = new System.Windows.Forms.ProgressBar();
 			this.textBoxMessages = new System.Windows.Forms.TextBox();
+			this.treeViewPublishList = new System.Windows.Forms.TreeView();
+			this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+			this.buttonPublishList = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// radioButtonLocal
 			// 
+			this.radioButtonLocal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.radioButtonLocal.AutoSize = true;
 			this.radioButtonLocal.Checked = true;
 			this.radioButtonLocal.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.radioButtonLocal.Location = new System.Drawing.Point(12, 78);
+			this.radioButtonLocal.Location = new System.Drawing.Point(12, 266);
 			this.radioButtonLocal.Name = "radioButtonLocal";
 			this.radioButtonLocal.Size = new System.Drawing.Size(51, 17);
 			this.radioButtonLocal.TabIndex = 0;
@@ -59,9 +63,10 @@
 			// 
 			// radioButtonOnline
 			// 
+			this.radioButtonOnline.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.radioButtonOnline.AutoSize = true;
 			this.radioButtonOnline.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.radioButtonOnline.Location = new System.Drawing.Point(87, 78);
+			this.radioButtonOnline.Location = new System.Drawing.Point(87, 266);
 			this.radioButtonOnline.Name = "radioButtonOnline";
 			this.radioButtonOnline.Size = new System.Drawing.Size(55, 17);
 			this.radioButtonOnline.TabIndex = 1;
@@ -72,8 +77,7 @@
 			// 
 			// buttonPublishNow
 			// 
-			this.buttonPublishNow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.buttonPublishNow.Location = new System.Drawing.Point(396, 234);
+			this.buttonPublishNow.Location = new System.Drawing.Point(124, 59);
 			this.buttonPublishNow.Name = "buttonPublishNow";
 			this.buttonPublishNow.Size = new System.Drawing.Size(75, 23);
 			this.buttonPublishNow.TabIndex = 2;
@@ -83,8 +87,9 @@
 			// 
 			// checkBoxHasPlugins
 			// 
+			this.checkBoxHasPlugins.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkBoxHasPlugins.AutoSize = true;
-			this.checkBoxHasPlugins.Location = new System.Drawing.Point(13, 112);
+			this.checkBoxHasPlugins.Location = new System.Drawing.Point(13, 300);
 			this.checkBoxHasPlugins.Name = "checkBoxHasPlugins";
 			this.checkBoxHasPlugins.Size = new System.Drawing.Size(81, 17);
 			this.checkBoxHasPlugins.TabIndex = 3;
@@ -94,8 +99,9 @@
 			// 
 			// checkBoxUpdateRevision
 			// 
+			this.checkBoxUpdateRevision.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkBoxUpdateRevision.AutoSize = true;
-			this.checkBoxUpdateRevision.Location = new System.Drawing.Point(12, 144);
+			this.checkBoxUpdateRevision.Location = new System.Drawing.Point(12, 332);
 			this.checkBoxUpdateRevision.Name = "checkBoxUpdateRevision";
 			this.checkBoxUpdateRevision.Size = new System.Drawing.Size(100, 17);
 			this.checkBoxUpdateRevision.TabIndex = 4;
@@ -105,8 +111,9 @@
 			// 
 			// checkBoxAutoStartupWithWindows
 			// 
+			this.checkBoxAutoStartupWithWindows.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkBoxAutoStartupWithWindows.AutoSize = true;
-			this.checkBoxAutoStartupWithWindows.Location = new System.Drawing.Point(12, 180);
+			this.checkBoxAutoStartupWithWindows.Location = new System.Drawing.Point(12, 368);
 			this.checkBoxAutoStartupWithWindows.Name = "checkBoxAutoStartupWithWindows";
 			this.checkBoxAutoStartupWithWindows.Size = new System.Drawing.Size(100, 17);
 			this.checkBoxAutoStartupWithWindows.TabIndex = 5;
@@ -124,6 +131,7 @@
 			this.comboBoxProjectName.Size = new System.Drawing.Size(188, 28);
 			this.comboBoxProjectName.TabIndex = 6;
 			this.comboBoxProjectName.SelectedIndexChanged += new System.EventHandler(this.comboBoxProjectName_SelectedIndexChanged);
+			this.comboBoxProjectName.TextChanged += new System.EventHandler(this.comboBoxProjectName_TextChanged);
 			// 
 			// label1
 			// 
@@ -139,9 +147,9 @@
 			// 
 			this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.progressBar.Location = new System.Drawing.Point(225, 218);
+			this.progressBar.Location = new System.Drawing.Point(232, 375);
 			this.progressBar.Name = "progressBar";
-			this.progressBar.Size = new System.Drawing.Size(246, 10);
+			this.progressBar.Size = new System.Drawing.Size(316, 10);
 			this.progressBar.TabIndex = 8;
 			this.progressBar.Visible = false;
 			// 
@@ -150,19 +158,61 @@
 			this.textBoxMessages.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.textBoxMessages.Location = new System.Drawing.Point(225, 25);
+			this.textBoxMessages.Location = new System.Drawing.Point(232, 25);
 			this.textBoxMessages.Multiline = true;
 			this.textBoxMessages.Name = "textBoxMessages";
 			this.textBoxMessages.ReadOnly = true;
 			this.textBoxMessages.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.textBoxMessages.Size = new System.Drawing.Size(246, 187);
+			this.textBoxMessages.Size = new System.Drawing.Size(316, 344);
 			this.textBoxMessages.TabIndex = 9;
+			// 
+			// treeViewPublishList
+			// 
+			this.treeViewPublishList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.treeViewPublishList.HotTracking = true;
+			this.treeViewPublishList.Indent = 5;
+			this.treeViewPublishList.Location = new System.Drawing.Point(12, 106);
+			this.treeViewPublishList.Name = "treeViewPublishList";
+			this.treeViewPublishList.ShowLines = false;
+			this.treeViewPublishList.ShowPlusMinus = false;
+			this.treeViewPublishList.ShowRootLines = false;
+			this.treeViewPublishList.Size = new System.Drawing.Size(187, 118);
+			this.treeViewPublishList.TabIndex = 10;
+			this.treeViewPublishList.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewPublishList_AfterSelect);
+			// 
+			// linkLabel1
+			// 
+			this.linkLabel1.AutoSize = true;
+			this.linkLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.linkLabel1.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.linkLabel1.Location = new System.Drawing.Point(12, 90);
+			this.linkLabel1.Name = "linkLabel1";
+			this.linkLabel1.Size = new System.Drawing.Size(53, 13);
+			this.linkLabel1.TabIndex = 11;
+			this.linkLabel1.TabStop = true;
+			this.linkLabel1.Text = "Add to list";
+			this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelAddToPublishList_LinkClicked);
+			// 
+			// buttonPublishList
+			// 
+			this.buttonPublishList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.buttonPublishList.Location = new System.Drawing.Point(124, 230);
+			this.buttonPublishList.Name = "buttonPublishList";
+			this.buttonPublishList.Size = new System.Drawing.Size(75, 23);
+			this.buttonPublishList.TabIndex = 12;
+			this.buttonPublishList.Text = "Publish &list";
+			this.buttonPublishList.UseVisualStyleBackColor = true;
+			this.buttonPublishList.Click += new System.EventHandler(this.buttonPublishList_Click);
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(483, 269);
+			this.ClientSize = new System.Drawing.Size(560, 426);
+			this.Controls.Add(this.buttonPublishList);
+			this.Controls.Add(this.linkLabel1);
+			this.Controls.Add(this.treeViewPublishList);
 			this.Controls.Add(this.textBoxMessages);
 			this.Controls.Add(this.progressBar);
 			this.Controls.Add(this.label1);
@@ -200,6 +250,9 @@
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ProgressBar progressBar;
 		private System.Windows.Forms.TextBox textBoxMessages;
+		private System.Windows.Forms.TreeView treeViewPublishList;
+		private System.Windows.Forms.LinkLabel linkLabel1;
+		private System.Windows.Forms.Button buttonPublishList;
 	}
 }
 

@@ -74,7 +74,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;WINFORMS,NOTUSEINTERCEPTOR,NOTUSEFACEDETECTION</DefineConstants>
     <Optimize>true</Optimize>
     <NoWarn>;2008</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -133,6 +133,15 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\..\..\..\Francois\Dev\VSprojects\SharedClasses\StringExtensions.cs">
+      <Link>StringExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\..\..\..\Francois\Dev\VSprojects\SharedClasses\StylingInterop.cs">
+      <Link>StylingInterop.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\..\..\..\Francois\Dev\VSprojects\SharedClasses\Win32Api.cs">
+      <Link>Win32Api.cs</Link>
+    </Compile>
     <Compile Include="..\..\SharedClasses\ApplicationRecoveryAndRestart.cs">
       <Link>ApplicationRecoveryAndRestart.cs</Link>
     </Compile>
