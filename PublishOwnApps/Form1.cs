@@ -26,7 +26,7 @@ namespace PublishOwnApps
 			progressChangedEvent += new ProgressChangedEventHandler(OnProgressChangedEvent);
 
 			comboBoxProjectName.Items.Clear();
-			foreach (string item in GlobalSettings.PublishSettings.Instance.ListedApplicationNames.Split('|'))
+			foreach (string item in GlobalSettings.PublishSettings.Instance.ListedApplicationNames.Split('|').OrderBy(s => s))
 				comboBoxProjectName.Items.Add(item);
 		}
 

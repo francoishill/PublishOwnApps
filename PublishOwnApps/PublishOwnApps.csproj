@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -35,16 +35,17 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>DEBUG;WINFORMS,NOTUSEINTERCEPTOR,NOTUSEFACEDETECTION</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;WINFORMS,NOTUSEINTERCEPTOR,NOTUSEFACEDETECTION</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -109,10 +110,15 @@
     <Reference Include="CookComputing.XmlRpcV2">
       <HintPath>C:\Francois\Other\DLLs\XmlRpc\CookComputing.XmlRpcV2.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Francois\Other\DLLs\Windows API\Microsoft.WindowsAPICodePack.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -127,8 +133,61 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\SharedClasses\ApplicationRecoveryAndRestart.cs">
+      <Link>ApplicationRecoveryAndRestart.cs</Link>
+    </Compile>
+    <Compile Include="..\..\SharedClasses\EncodeAndDecodeInterop.cs">
+      <Link>EncodeAndDecodeInterop.cs</Link>
+    </Compile>
+    <Compile Include="..\..\SharedClasses\EventHandlers.cs">
+      <Link>EventHandlers.cs</Link>
+    </Compile>
+    <Compile Include="..\..\SharedClasses\FileSystemInterop.cs">
+      <Link>FileSystemInterop.cs</Link>
+    </Compile>
+    <Compile Include="..\..\SharedClasses\InputBox.cs">
+      <Link>InputBox.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\SharedClasses\InputBox.designer.cs">
+      <Link>InputBox.designer.cs</Link>
+      <DependentUpon>InputBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\SharedClasses\NetworkInterop.cs">
+      <Link>NetworkInterop.cs</Link>
+    </Compile>
+    <Compile Include="..\..\SharedClasses\NetworkInteropSerializedClasses\InfoTransferred.cs">
+      <Link>InfoTransferred.cs</Link>
+    </Compile>
+    <Compile Include="..\..\SharedClasses\NsisInterop.cs">
+      <Link>NsisInterop.cs</Link>
+    </Compile>
+    <Compile Include="..\..\SharedClasses\SerializationInterop.cs">
+      <Link>SerializationInterop.cs</Link>
+    </Compile>
+    <Compile Include="..\..\SharedClasses\SettingsInterop.cs">
+      <Link>SettingsInterop.cs</Link>
+    </Compile>
+    <Compile Include="..\..\SharedClasses\SharedClassesSettings.cs">
+      <Link>SharedClassesSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\..\SharedClasses\ThreadingInterop.cs">
+      <Link>ThreadingInterop.cs</Link>
+    </Compile>
+    <Compile Include="..\..\SharedClasses\TracXmlRpcInterop.cs">
+      <Link>TracXmlRpcInterop.cs</Link>
+    </Compile>
+    <Compile Include="..\..\SharedClasses\UserMessages.cs">
+      <Link>UserMessages.cs</Link>
+    </Compile>
+    <Compile Include="..\..\SharedClasses\VisualStudioInterop.cs">
+      <Link>VisualStudioInterop.cs</Link>
+    </Compile>
     <Compile Include="..\..\SharedClasses\WindowMessagesInterop.cs">
       <Link>WindowMessagesInterop.cs</Link>
+    </Compile>
+    <Compile Include="..\..\SharedClasses\WindowsInterop.cs">
+      <Link>WindowsInterop.cs</Link>
     </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -164,12 +223,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="C:\Users\francois\Documents\Visual Studio 2010\Projects\QuickAccess\InlineCommandToolkit\InlineCommandToolkit.csproj">
-      <Project>{3f73ece5-851e-4c02-ac70-37c0f92783ad}</Project>
-      <Name>InlineCommandToolkit</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="C:\Users\francois\Documents\Visual Studio 2010\Projects\QuickAccess\PublishCommandPlugin\Resources\DotNetChecker.dll">

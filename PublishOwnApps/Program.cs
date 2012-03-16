@@ -17,9 +17,13 @@ namespace PublishOwnApps
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 
+#if NOTUSEFACEDETECTION
+					
+#else
 			if (SharedClasses.FaceDetectionInterop.CheckFaceDetectionDllsExistInCurrentExeDir(true)
 				|| UserMessages.Confirm("Due to missing DLLs, application will not be able to do online publishing, continue withouth this support?"))
-				Application.Run(new Form1());
+#endif
+			Application.Run(new Form1());
 		}
 	}
 }
