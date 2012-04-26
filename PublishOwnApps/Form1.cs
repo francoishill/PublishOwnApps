@@ -242,6 +242,27 @@ namespace PublishOwnApps
 			checkBoxUpdateRevision.Checked = app.UpdateRevisionNumber;
 			checkBoxAutoStartupWithWindows.Checked = app.AutostartWithWindows;
 		}
+
+		private void checkBoxHasPlugins_CheckedChanged(object sender, EventArgs e)
+		{
+			ApplicationToPublish app = comboBoxProjectName.SelectedItem as ApplicationToPublish;
+			if (app == null) return;
+			app.HasPlugins = checkBoxHasPlugins.Checked;
+		}
+
+		private void checkBoxUpdateRevision_CheckedChanged(object sender, EventArgs e)
+		{
+			ApplicationToPublish app = comboBoxProjectName.SelectedItem as ApplicationToPublish;
+			if (app == null) return;
+			app.UpdateRevisionNumber = checkBoxUpdateRevision.Checked;
+		}
+
+		private void checkBoxAutoStartupWithWindows_CheckedChanged(object sender, EventArgs e)
+		{
+			ApplicationToPublish app = comboBoxProjectName.SelectedItem as ApplicationToPublish;
+			if (app == null) return;
+			app.AutostartWithWindows = checkBoxAutoStartupWithWindows.Checked;
+		}
 	}
 
 	public class ApplicationToPublish

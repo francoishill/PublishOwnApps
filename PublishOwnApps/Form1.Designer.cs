@@ -96,6 +96,7 @@
 			this.checkBoxHasPlugins.Text = "Has plugins";
 			this.toolTip1.SetToolTip(this.checkBoxHasPlugins, "The application has projects inside its solution folder ending with \"Plugin\"");
 			this.checkBoxHasPlugins.UseVisualStyleBackColor = true;
+			this.checkBoxHasPlugins.CheckedChanged += new System.EventHandler(this.checkBoxHasPlugins_CheckedChanged);
 			// 
 			// checkBoxUpdateRevision
 			// 
@@ -108,6 +109,7 @@
 			this.checkBoxUpdateRevision.Text = "Update revision";
 			this.toolTip1.SetToolTip(this.checkBoxUpdateRevision, "The revision (of the version) must be increased upon successful publish");
 			this.checkBoxUpdateRevision.UseVisualStyleBackColor = true;
+			this.checkBoxUpdateRevision.CheckedChanged += new System.EventHandler(this.checkBoxUpdateRevision_CheckedChanged);
 			// 
 			// checkBoxAutoStartupWithWindows
 			// 
@@ -120,6 +122,7 @@
 			this.checkBoxAutoStartupWithWindows.Text = "Load on startup";
 			this.toolTip1.SetToolTip(this.checkBoxAutoStartupWithWindows, "The application must be placed in the registry to startup with windows");
 			this.checkBoxAutoStartupWithWindows.UseVisualStyleBackColor = true;
+			this.checkBoxAutoStartupWithWindows.CheckedChanged += new System.EventHandler(this.checkBoxAutoStartupWithWindows_CheckedChanged);
 			// 
 			// comboBoxProjectName
 			// 
