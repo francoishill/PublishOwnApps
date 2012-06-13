@@ -23,6 +23,7 @@ namespace PublishOwnApps
 			if (SharedClasses.FaceDetectionInterop.CheckFaceDetectionDllsExistInCurrentExeDir(true)
 				|| UserMessages.Confirm("Due to missing DLLs, application will not be able to do online publishing, continue withouth this support?"))
 #endif
+			SharedClasses.AutoUpdatingForm.CheckForUpdates();
 			Application.Run(new Form1());
 		}
 	}

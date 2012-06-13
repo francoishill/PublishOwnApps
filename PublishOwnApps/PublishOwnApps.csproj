@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -23,7 +23,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>3</ApplicationRevision>
+    <ApplicationRevision>8</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -145,22 +145,8 @@
     <Compile Include="..\..\SharedClasses\ApplicationRecoveryAndRestart.cs">
       <Link>ApplicationRecoveryAndRestart.cs</Link>
     </Compile>
-    <Compile Include="..\..\SharedClasses\EncodeAndDecodeInterop.cs">
-      <Link>EncodeAndDecodeInterop.cs</Link>
-    </Compile>
     <Compile Include="..\..\SharedClasses\EventHandlers.cs">
       <Link>EventHandlers.cs</Link>
-    </Compile>
-    <Compile Include="..\..\SharedClasses\FileSystemInterop.cs">
-      <Link>FileSystemInterop.cs</Link>
-    </Compile>
-    <Compile Include="..\..\SharedClasses\InputBox.cs">
-      <Link>InputBox.cs</Link>
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="..\..\SharedClasses\InputBox.designer.cs">
-      <Link>InputBox.designer.cs</Link>
-      <DependentUpon>InputBox.cs</DependentUpon>
     </Compile>
     <Compile Include="..\..\SharedClasses\NetworkInterop.cs">
       <Link>NetworkInterop.cs</Link>
@@ -174,34 +160,11 @@
     <Compile Include="..\..\SharedClasses\SerializationInterop.cs">
       <Link>SerializationInterop.cs</Link>
     </Compile>
-    <Compile Include="..\..\SharedClasses\SettingsInterop.cs">
-      <Link>SettingsInterop.cs</Link>
-    </Compile>
-    <Compile Include="..\..\SharedClasses\SharedClassesSettings.cs">
-      <Link>SharedClassesSettings.cs</Link>
-    </Compile>
-    <Compile Include="..\..\SharedClasses\ThreadingInterop.cs">
-      <Link>ThreadingInterop.cs</Link>
-    </Compile>
     <Compile Include="..\..\SharedClasses\TracXmlRpcInterop.cs">
       <Link>TracXmlRpcInterop.cs</Link>
     </Compile>
-    <Compile Include="..\..\SharedClasses\UserMessageBox.cs">
-      <Link>UserMessageBox.cs</Link>
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="..\..\SharedClasses\UserMessageBox.designer.cs">
-      <Link>UserMessageBox.designer.cs</Link>
-      <DependentUpon>UserMessageBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="..\..\SharedClasses\UserMessages.cs">
-      <Link>UserMessages.cs</Link>
-    </Compile>
     <Compile Include="..\..\SharedClasses\VisualStudioInterop.cs">
       <Link>VisualStudioInterop.cs</Link>
-    </Compile>
-    <Compile Include="..\..\SharedClasses\WebInterop.cs">
-      <Link>WebInterop.cs</Link>
     </Compile>
     <Compile Include="..\..\SharedClasses\WindowMessagesInterop.cs">
       <Link>WindowMessagesInterop.cs</Link>
@@ -217,10 +180,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="..\..\SharedClasses\UserMessageBox.resx">
-      <Link>UserMessageBox.resx</Link>
-      <DependentUpon>UserMessageBox.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -282,6 +241,10 @@
     <Content Include="app.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\AutoUpdateDLL\AutoUpdateDLL\AutoUpdateDLL.csproj">
+      <Project>{80be2a9c-9f23-482d-bf98-e05192500378}</Project>
+      <Name>AutoUpdateDLL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\TestfastJSON\fastJSON\fastJSON.csproj">
       <Project>{207e91b1-c9f8-4913-88e1-3549ef5f3273}</Project>
       <Name>fastJSON</Name>
