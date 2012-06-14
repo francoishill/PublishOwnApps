@@ -132,7 +132,7 @@ namespace PublishOwnApps
 						projName: apptoPublish.ApplicationName,//comboBoxProjectName.Text,
 						versionString: out tmpNoUseVersionStr,
 						HasPlugins: apptoPublish.HasPlugins,//checkBoxHasPlugins.Checked,
-						AutomaticallyUpdateRevision: apptoPublish.UpdateRevisionNumber,//checkBoxUpdateRevision.Checked,
+						AutomaticallyUpdateRevision: true,//apptoPublish.UpdateRevisionNumber,//checkBoxUpdateRevision.Checked,
 						WriteIntoRegistryForWindowsAutostartup: apptoPublish.AutostartWithWindows,//checkBoxAutoStartupWithWindows.Checked,
 						textFeedbackEvent: textFeedbackEvent);
 				}
@@ -142,7 +142,7 @@ namespace PublishOwnApps
 							 textfeedbackSenderObject: this,
 							 projName: apptoPublish.ApplicationName,//comboBoxProjectName.Text,
 							 HasPlugins: apptoPublish.HasPlugins,//checkBoxHasPlugins.Checked,
-							 AutomaticallyUpdateRevision: apptoPublish.UpdateRevisionNumber,//checkBoxUpdateRevision.Checked,
+							 AutomaticallyUpdateRevision: true,//apptoPublish.UpdateRevisionNumber,//checkBoxUpdateRevision.Checked,
 							 WriteIntoRegistryForWindowsAutostartup: apptoPublish.AutostartWithWindows,//checkBoxAutoStartupWithWindows.Checked,
 							 textFeedbackEvent: textFeedbackEvent,
 							 progressChanged: progressChangedEvent);
@@ -161,7 +161,7 @@ namespace PublishOwnApps
 				return;
 
 			checkBoxHasPlugins.Checked = (comboBoxProjectName.SelectedItem as ApplicationToPublish).HasPlugins;
-			checkBoxUpdateRevision.Checked = (comboBoxProjectName.SelectedItem as ApplicationToPublish).UpdateRevisionNumber;
+            //checkBoxUpdateRevision.Checked = (comboBoxProjectName.SelectedItem as ApplicationToPublish).UpdateRevisionNumber;
 			checkBoxAutoStartupWithWindows.Checked = (comboBoxProjectName.SelectedItem as ApplicationToPublish).AutostartWithWindows;
 		}
 
@@ -171,7 +171,7 @@ namespace PublishOwnApps
 			//checkBoxUpdateRevision.Enabled = comboBoxProjectName.SelectedIndex != -1;
 			//checkBoxAutoStartupWithWindows.Enabled = comboBoxProjectName.SelectedIndex != -1;
 			checkBoxHasPlugins.Checked = false;
-			checkBoxUpdateRevision.Checked = false;
+            //checkBoxUpdateRevision.Checked = false;
 			checkBoxAutoStartupWithWindows.Checked = false;
 		}
 
@@ -239,7 +239,7 @@ namespace PublishOwnApps
 			if (app == null)
 				return;
 			checkBoxHasPlugins.Checked = app.HasPlugins;
-			checkBoxUpdateRevision.Checked = app.UpdateRevisionNumber;
+            //checkBoxUpdateRevision.Checked = app.UpdateRevisionNumber;
 			checkBoxAutoStartupWithWindows.Checked = app.AutostartWithWindows;
 		}
 
