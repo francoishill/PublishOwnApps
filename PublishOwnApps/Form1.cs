@@ -19,6 +19,7 @@ namespace PublishOwnApps
 		public Form1()
 		{
 			InitializeComponent();
+			checkBoxTopmost.Checked = this.TopMost;
 
 			WindowMessagesInterop.InitializeClientMessages();
 
@@ -26,7 +27,8 @@ namespace PublishOwnApps
 			progressChangedEvent += new ProgressChangedEventHandler(OnProgressChangedEvent);
 
 			comboBoxProjectName.Items.Clear();
-			foreach (string item in GlobalSettings.PublishSettings.Instance.ListedApplicationNames.Split('|').OrderBy(s => s))
+			//foreach (string item in GlobalSettings.PublishSettings.Instance.ListedApplicationNames.Split('|').OrderBy(s => s))
+			foreach (string item in OnlineSettings.PublishSettings.Instance.ListedApplicationNames.OrderBy(s => s))
 				comboBoxProjectName.Items.Add(
 					new ApplicationToPublish(
 						item,
@@ -35,6 +37,12 @@ namespace PublishOwnApps
 						AutostartWithWindows: item.Equals(StringComparison.InvariantCultureIgnoreCase,
 							"ApplicationManager", "MonitorSystem", "QuickAccess", "StartupTodoManager", "TestingMonitorSubversion")
 						));
+
+			//CustomBalloonTipwpf.ShowCustomBalloonTip(
+			//	"Test title",
+			//	"Message 123",
+			//	2000,
+			//	CustomBalloonTipwpf.IconTypes.Information);
 		}
 
 		protected override void WndProc(ref Message m)
@@ -115,12 +123,21 @@ namespace PublishOwnApps
 			}
 		}
 
+		private bool BusyPublishing = false;
 		private void PublishApplication(ApplicationToPublish apptoPublish)
 		{
 			InitialTopmost = this.TopMost;
 			this.TopMost = false;
 			using (ThreadingInterop.WaitIndicator wi = new ThreadingInterop.WaitIndicator())
 			{
+				if (BusyPublishing)
+				{
+					UserMessages.ShowWarningMessage("Publishing is busy, please be patient...");
+					return;
+				}
+
+				BusyPublishing = true;
+
 				currentProgressBar = wi;
 				UpdateProgressBarPosition();
 
@@ -132,9 +149,11 @@ namespace PublishOwnApps
 						projName: apptoPublish.ApplicationName,//comboBoxProjectName.Text,
 						versionString: out tmpNoUseVersionStr,
 						HasPlugins: apptoPublish.HasPlugins,//checkBoxHasPlugins.Checked,
+						InstallLocallyAfterSuccessfullNSIS: checkBoxInstallLocally.Checked,
 						AutomaticallyUpdateRevision: true,//apptoPublish.UpdateRevisionNumber,//checkBoxUpdateRevision.Checked,
 						WriteIntoRegistryForWindowsAutostartup: apptoPublish.AutostartWithWindows,//checkBoxAutoStartupWithWindows.Checked,
-						textFeedbackEvent: textFeedbackEvent);
+						textFeedbackEvent: textFeedbackEvent,
+						SelectInFolderAfterSuccessfullNSIS: checkBoxOpenFolder.Checked);
 				}
 				else if (radioButtonOnline.Checked)
 				{
@@ -143,12 +162,17 @@ namespace PublishOwnApps
 							 projName: apptoPublish.ApplicationName,//comboBoxProjectName.Text,
 							 HasPlugins: apptoPublish.HasPlugins,//checkBoxHasPlugins.Checked,
 							 AutomaticallyUpdateRevision: true,//apptoPublish.UpdateRevisionNumber,//checkBoxUpdateRevision.Checked,
+							 OpenSetupFileAfterSuccessfullNSIS: checkBoxInstallLocally.Checked,
 							 WriteIntoRegistryForWindowsAutostartup: apptoPublish.AutostartWithWindows,//checkBoxAutoStartupWithWindows.Checked,
 							 textFeedbackEvent: textFeedbackEvent,
-							 progressChanged: progressChangedEvent);
+							 progressChanged: progressChangedEvent,
+							 OpenFolderAfterSuccessfullNSIS: checkBoxOpenFolder.Checked,
+							 OpenWebsite: checkBoxOpenWebsite.Checked);
 				}
 				else
 					UserMessages.ShowWarningMessage("Please choose either local or online.");
+
+				BusyPublishing = false;
 
 				currentProgressBar = null;
 			}
@@ -161,7 +185,7 @@ namespace PublishOwnApps
 				return;
 
 			checkBoxHasPlugins.Checked = (comboBoxProjectName.SelectedItem as ApplicationToPublish).HasPlugins;
-            //checkBoxUpdateRevision.Checked = (comboBoxProjectName.SelectedItem as ApplicationToPublish).UpdateRevisionNumber;
+			//checkBoxUpdateRevision.Checked = (comboBoxProjectName.SelectedItem as ApplicationToPublish).UpdateRevisionNumber;
 			checkBoxAutoStartupWithWindows.Checked = (comboBoxProjectName.SelectedItem as ApplicationToPublish).AutostartWithWindows;
 		}
 
@@ -171,7 +195,7 @@ namespace PublishOwnApps
 			//checkBoxUpdateRevision.Enabled = comboBoxProjectName.SelectedIndex != -1;
 			//checkBoxAutoStartupWithWindows.Enabled = comboBoxProjectName.SelectedIndex != -1;
 			checkBoxHasPlugins.Checked = false;
-            //checkBoxUpdateRevision.Checked = false;
+			//checkBoxUpdateRevision.Checked = false;
 			checkBoxAutoStartupWithWindows.Checked = false;
 		}
 
@@ -199,6 +223,7 @@ namespace PublishOwnApps
 					currentProgressBar.progressForm.Location = new Point(
 						this.Left + (this.Width / 2) - (currentProgressBar.progressForm.Width / 2),
 						this.Top + (this.Height / 2) - (currentProgressBar.progressForm.Height / 2));
+					Application.DoEvents();
 				}
 				catch { }
 			}
@@ -239,7 +264,7 @@ namespace PublishOwnApps
 			if (app == null)
 				return;
 			checkBoxHasPlugins.Checked = app.HasPlugins;
-            //checkBoxUpdateRevision.Checked = app.UpdateRevisionNumber;
+			//checkBoxUpdateRevision.Checked = app.UpdateRevisionNumber;
 			checkBoxAutoStartupWithWindows.Checked = app.AutostartWithWindows;
 		}
 
@@ -262,6 +287,20 @@ namespace PublishOwnApps
 			ApplicationToPublish app = comboBoxProjectName.SelectedItem as ApplicationToPublish;
 			if (app == null) return;
 			app.AutostartWithWindows = checkBoxAutoStartupWithWindows.Checked;
+		}
+
+		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			if (BusyPublishing)
+			{
+				e.Cancel = true;
+				UserMessages.ShowWarningMessage("Busy publishing, please wait before closing...");
+			}
+		}
+
+		private void checkBoxTopmost_CheckedChanged(object sender, EventArgs e)
+		{
+			this.TopMost = checkBoxTopmost.Checked;
 		}
 	}
 
