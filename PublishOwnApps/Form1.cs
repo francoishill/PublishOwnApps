@@ -128,7 +128,7 @@ namespace PublishOwnApps
 		{
 			InitialTopmost = this.TopMost;
 			this.TopMost = false;
-			using (ThreadingInterop.WaitIndicator wi = new ThreadingInterop.WaitIndicator())
+			using (ThreadingInterop.WaitIndicator wi = new ThreadingInterop.WaitIndicator(this))
 			{
 				if (BusyPublishing)
 				{
