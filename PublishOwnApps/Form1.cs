@@ -19,6 +19,7 @@ namespace PublishOwnApps
 		public Form1()
 		{
 			InitializeComponent();
+
 			checkBoxTopmost.Checked = this.TopMost;
 
 			WindowMessagesInterop.InitializeClientMessages();
