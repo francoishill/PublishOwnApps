@@ -40,7 +40,6 @@
 			this.comboBoxProjectName = new System.Windows.Forms.ComboBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.progressBar = new System.Windows.Forms.ProgressBar();
-			this.textBoxMessages = new System.Windows.Forms.TextBox();
 			this.treeViewPublishList = new System.Windows.Forms.TreeView();
 			this.linkLabel1 = new System.Windows.Forms.LinkLabel();
 			this.buttonPublishList = new System.Windows.Forms.Button();
@@ -48,6 +47,7 @@
 			this.checkBoxOpenFolder = new System.Windows.Forms.CheckBox();
 			this.checkBoxOpenWebsite = new System.Windows.Forms.CheckBox();
 			this.checkBoxTopmost = new System.Windows.Forms.CheckBox();
+			this.richTextBoxExMessages = new SharedClasses.RichTextBoxEx();
 			this.SuspendLayout();
 			// 
 			// radioButtonLocal
@@ -159,21 +159,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.progressBar.Location = new System.Drawing.Point(251, 401);
 			this.progressBar.Name = "progressBar";
-			this.progressBar.Size = new System.Drawing.Size(368, 10);
+			this.progressBar.Size = new System.Drawing.Size(617, 10);
 			this.progressBar.TabIndex = 8;
-			// 
-			// textBoxMessages
-			// 
-			this.textBoxMessages.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.textBoxMessages.Location = new System.Drawing.Point(251, 25);
-			this.textBoxMessages.Multiline = true;
-			this.textBoxMessages.Name = "textBoxMessages";
-			this.textBoxMessages.ReadOnly = true;
-			this.textBoxMessages.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.textBoxMessages.Size = new System.Drawing.Size(368, 370);
-			this.textBoxMessages.TabIndex = 9;
 			// 
 			// treeViewPublishList
 			// 
@@ -250,7 +237,7 @@
 			// 
 			this.checkBoxTopmost.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.checkBoxTopmost.AutoSize = true;
-			this.checkBoxTopmost.Location = new System.Drawing.Point(552, 5);
+			this.checkBoxTopmost.Location = new System.Drawing.Point(801, 5);
 			this.checkBoxTopmost.Name = "checkBoxTopmost";
 			this.checkBoxTopmost.Size = new System.Drawing.Size(67, 17);
 			this.checkBoxTopmost.TabIndex = 16;
@@ -258,11 +245,27 @@
 			this.checkBoxTopmost.UseVisualStyleBackColor = true;
 			this.checkBoxTopmost.CheckedChanged += new System.EventHandler(this.checkBoxTopmost_CheckedChanged);
 			// 
+			// richTextBoxExMessages
+			// 
+			this.richTextBoxExMessages.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.richTextBoxExMessages.BulletIndent = 4;
+			this.richTextBoxExMessages.Location = new System.Drawing.Point(251, 25);
+			this.richTextBoxExMessages.Name = "richTextBoxExMessages";
+			this.richTextBoxExMessages.ReadOnly = true;
+			this.richTextBoxExMessages.Size = new System.Drawing.Size(617, 370);
+			this.richTextBoxExMessages.TabIndex = 18;
+			this.richTextBoxExMessages.Text = "";
+			this.richTextBoxExMessages.WordWrap = false;
+			this.richTextBoxExMessages.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.richTextBoxExMessages_LinkClicked);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(631, 452);
+			this.ClientSize = new System.Drawing.Size(880, 452);
+			this.Controls.Add(this.richTextBoxExMessages);
 			this.Controls.Add(this.checkBoxTopmost);
 			this.Controls.Add(this.checkBoxOpenWebsite);
 			this.Controls.Add(this.checkBoxOpenFolder);
@@ -270,7 +273,6 @@
 			this.Controls.Add(this.buttonPublishList);
 			this.Controls.Add(this.linkLabel1);
 			this.Controls.Add(this.treeViewPublishList);
-			this.Controls.Add(this.textBoxMessages);
 			this.Controls.Add(this.progressBar);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.comboBoxProjectName);
@@ -305,15 +307,15 @@
 		private System.Windows.Forms.CheckBox checkBoxAutoStartupWithWindows;
 		private System.Windows.Forms.ComboBox comboBoxProjectName;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.ProgressBar progressBar;
-		private System.Windows.Forms.TextBox textBoxMessages;
+        private System.Windows.Forms.ProgressBar progressBar;
 		private System.Windows.Forms.TreeView treeViewPublishList;
 		private System.Windows.Forms.LinkLabel linkLabel1;
 		private System.Windows.Forms.Button buttonPublishList;
 		private System.Windows.Forms.CheckBox checkBoxInstallLocally;
 		private System.Windows.Forms.CheckBox checkBoxOpenFolder;
 		private System.Windows.Forms.CheckBox checkBoxOpenWebsite;
-		private System.Windows.Forms.CheckBox checkBoxTopmost;
+        private System.Windows.Forms.CheckBox checkBoxTopmost;
+        private SharedClasses.RichTextBoxEx richTextBoxExMessages;
 	}
 }
 

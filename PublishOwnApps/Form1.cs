@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows.Forms;
 using SharedClasses;
 
@@ -71,10 +74,45 @@ namespace PublishOwnApps
 			Action action = new Action(
 				delegate
 				{
-					textBoxMessages.Text += (textBoxMessages.Text.Trim().Length > 0 ? Environment.NewLine : "") + e.FeedbackText;
-					textBoxMessages.SelectionStart = textBoxMessages.Text.Length;
-					textBoxMessages.SelectionLength = 0;
-					textBoxMessages.ScrollToCaret();
+					if (richTextBoxExMessages.Text.Trim().Length > 0)
+						richTextBoxExMessages.AppendText(Environment.NewLine);
+
+					if (!e.HyperlinkRange.HasValue)
+						richTextBoxExMessages.AppendText(e.FeedbackText);
+					else
+					{
+						string msgBefore = e.FeedbackText.Substring(0, e.HyperlinkRange.Value.Start);
+						string hyperlink = e.FeedbackText.Substring(e.HyperlinkRange.Value.Start, e.HyperlinkRange.Value.Length);
+						string msgAfter = e.HyperlinkRange.Value.End < e.FeedbackText.Length ? e.FeedbackText.Substring(e.HyperlinkRange.Value.End + 1) : "";
+
+						richTextBoxExMessages.AppendText(msgBefore);
+
+						richTextBoxExMessages.SelectionStart = richTextBoxExMessages.Text.Length;
+						richTextBoxExMessages.SelectionLength = 0;
+						string prefix = e.HyperlinkRange.Value.LinkType.ToString().ToLower() + ":";
+						string displayPath = "";
+						switch (e.HyperlinkRange.Value.LinkType)
+						{
+							case Range.LinkTypes.ExplorerSelect:
+								displayPath = Path.GetFileName(hyperlink);
+								break;
+							case Range.LinkTypes.OpenUrl:
+								displayPath = hyperlink.Replace('\\', '/');
+								break;
+							default:
+								break;
+						}
+
+						richTextBoxExMessages.InsertLink(
+							displayPath,
+							EncodeAndDecodeInterop.EncodeStringHex(prefix + hyperlink));
+
+						richTextBoxExMessages.AppendText(msgAfter);
+					}
+
+					richTextBoxExMessages.SelectionStart = richTextBoxExMessages.Text.Length;
+					richTextBoxExMessages.SelectionLength = 0;
+					richTextBoxExMessages.ScrollToCaret();
 				});
 			if (this.InvokeRequired)
 				this.Invoke(action);
@@ -303,6 +341,30 @@ namespace PublishOwnApps
 		{
 			this.TopMost = checkBoxTopmost.Checked;
 		}
+
+		private void richTextBoxExMessages_LinkClicked(object sender, LinkClickedEventArgs e)
+		{
+			string pathWithPrefix = EncodeAndDecodeInterop.DecodeStringHex(e.LinkText.Substring(e.LinkText.LastIndexOf('#') + 1));
+			string prefix = pathWithPrefix.Substring(0, pathWithPrefix.IndexOf(':'));
+			string path = pathWithPrefix.Substring(pathWithPrefix.IndexOf(':') + 1);
+			Range.LinkTypes linkType;
+			if (Enum.TryParse<Range.LinkTypes>(prefix, true, out linkType))
+			{
+				switch (linkType)
+				{
+					case Range.LinkTypes.ExplorerSelect:
+						Process.Start("explorer", "/select,\"" + path + "\"");
+						break;
+					case Range.LinkTypes.OpenUrl:
+						Process.Start(path);
+						break;
+					default:
+						break;
+				}
+			}
+			else
+				UserMessages.ShowWarningMessage("Cannot use link, unable to get linktype fro prefix = " + prefix);
+		}
 	}
 
 	public class ApplicationToPublish
@@ -323,4 +385,5 @@ namespace PublishOwnApps
 			return ApplicationName;
 		}
 	}
+
 }
