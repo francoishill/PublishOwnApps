@@ -26,7 +26,9 @@ namespace PublishOwnApps
 			Form1 mainform = new Form1();
 			SharedClasses.AutoUpdatingForm.CheckForUpdates(
 				exitApplicationAction: delegate { Application.Exit(); },
-				ActionIfUptoDate_Versionstring: (versionstring) => { mainform.Text += " (up to date version " + versionstring + ")"; });
+				ActionIfUptoDate_Versionstring: (versionstring) => ThreadingInterop.UpdateGuiFromThread(mainform, () => mainform.Text += " (up to date version " + versionstring + ")"),
+				ActionIfUnableToCheckForUpdates: (errmsg) => ThreadingInterop.UpdateGuiFromThread(mainform, () => mainform.Text += " (" + errmsg + ")"));
+
 			Application.Run(mainform);
 		}
 	}

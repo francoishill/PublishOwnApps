@@ -288,6 +288,7 @@
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Publish application";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+			this.Load += new System.EventHandler(this.Form1_Load);
 			this.Shown += new System.EventHandler(this.Form1_Shown);
 			this.LocationChanged += new System.EventHandler(this.Form1_LocationChanged);
 			this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);

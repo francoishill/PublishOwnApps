@@ -6,10 +6,12 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
+using Microsoft.WindowsAPICodePack.Taskbar;
 using SharedClasses;
 
 namespace PublishOwnApps
@@ -18,6 +20,7 @@ namespace PublishOwnApps
 	{
 		TextFeedbackEventHandler textFeedbackEvent;
 		ProgressChangedEventHandler progressChangedEvent;
+		string AppNameReceivedViaCommandline = null;
 
 		public Form1()
 		{
@@ -30,23 +33,71 @@ namespace PublishOwnApps
 			textFeedbackEvent += new TextFeedbackEventHandler(OnTextFeedbackEvent);
 			progressChangedEvent += new ProgressChangedEventHandler(OnProgressChangedEvent);
 
-			comboBoxProjectName.Items.Clear();
-			//foreach (string item in GlobalSettings.PublishSettings.Instance.ListedApplicationNames.Split('|').OrderBy(s => s))
-			foreach (string item in OnlineSettings.PublishSettings.Instance.ListedApplicationNames.OrderBy(s => s))
-				comboBoxProjectName.Items.Add(
-					new ApplicationToPublish(
-						item,
-						HasPlugins: item.Equals("QuickAccess", StringComparison.InvariantCultureIgnoreCase),
-						UpdateRevisionNumber: false,
-						AutostartWithWindows: item.Equals(StringComparison.InvariantCultureIgnoreCase,
-							"ApplicationManager", "MonitorSystem", "QuickAccess", "StartupTodoManager", "TestingMonitorSubversion")
-						));
-
 			//CustomBalloonTipwpf.ShowCustomBalloonTip(
 			//	"Test title",
 			//	"Message 123",
 			//	2000,
 			//	CustomBalloonTipwpf.IconTypes.Information);
+		}
+
+		private void PopulateApplicationsList()
+		{
+			var _jumpList = JumpList.CreateJumpList();
+
+			comboBoxProjectName.Items.Clear();
+			_jumpList.ClearAllUserTasks();
+
+			JumpListCustomCategory userActionsCategory = new JumpListCustomCategory("Publish applications");
+
+			//foreach (string item in GlobalSettings.PublishSettings.Instance.ListedApplicationNames.Split('|').OrderBy(s => s))
+			int listcnt = 0;
+			foreach (string appname in OnlineSettings.PublishSettings.Instance.ListedApplicationNames.OrderBy(s => s))
+			{
+				comboBoxProjectName.Items.Add(
+					new ApplicationToPublish(
+						appname,
+						HasPlugins: appname.Equals("QuickAccess", StringComparison.InvariantCultureIgnoreCase),
+						UpdateRevisionNumber: false,
+						AutostartWithWindows: appname.Equals(StringComparison.InvariantCultureIgnoreCase,
+							"ApplicationManager", "MonitorSystem", "QuickAccess", "StartupTodoManager", "TestingMonitorSubversion")
+						));
+
+				string appnameWithSpaces = VisualStudioInterop.InsertSpacesBeforeCamelCase(appname);
+				string appExePath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86).TrimEnd('\\') + string.Format("\\{0}\\{1}.exe", appnameWithSpaces, appname);
+				JumpListLink actionPublishQuickAccess = new JumpListLink(Assembly.GetEntryAssembly().Location, appnameWithSpaces);
+				actionPublishQuickAccess.Arguments = appname;
+				if (File.Exists(appExePath))
+					actionPublishQuickAccess.IconReference = new Microsoft.WindowsAPICodePack.Shell.IconReference(appExePath, 0);
+				userActionsCategory.AddJumpListItems(actionPublishQuickAccess);
+				listcnt++;
+			}
+			if (listcnt > _jumpList.MaxSlotsInList)
+				UserMessages.ShowWarningMessage(
+					string.Format("The taskbar jumplist has {0} maximum slots but the list is {1}, the extra items will be truncated", _jumpList.MaxSlotsInList, listcnt));
+
+			_jumpList.AddCustomCategories(userActionsCategory);
+			_jumpList.Refresh();
+
+			if (Environment.GetCommandLineArgs().Length == 2)
+				//Probably passed via windows 7 JumpList, see what happens in Form1_Shown
+				AppNameReceivedViaCommandline = Environment.GetCommandLineArgs()[1];
+
+			this.Cursor = Cursors.Default;
+			if (AppNameReceivedViaCommandline == null)
+				comboBoxProjectName.DroppedDown = true;
+			else
+			{
+				comboBoxProjectName.Focus();
+				this.comboBoxProjectName.Text = AppNameReceivedViaCommandline;
+				ApplicationToPublish apptoPublishFromCommandline = this.comboBoxProjectName.SelectedItem as ApplicationToPublish;
+				if (apptoPublishFromCommandline != null)
+				{
+					this.WindowState = FormWindowState.Minimized;
+					buttonPublishNow.PerformClick();
+				}
+			}
+			this.Cursor = Cursors.Default;
+			Application.DoEvents();
 		}
 
 		protected override void WndProc(ref Message m)
@@ -67,6 +118,16 @@ namespace PublishOwnApps
 		{
 			StylingInterop.SetTreeviewVistaStyle(treeViewPublishList);
 			base.OnHandleCreated(e);
+		}
+
+		private void Form1_Load(object sender, EventArgs e)
+		{
+			TaskbarManager.Instance.ApplicationId = ThisAppName;
+		}
+
+		private void Form1_Shown(object sender, EventArgs e)
+		{
+			PopulateApplicationsList();
 		}
 
 		private void OnTextFeedbackEvent(object sender, TextFeedbackEventArgs e)
@@ -136,7 +197,7 @@ namespace PublishOwnApps
 				action();
 		}
 
-		private ThreadingInterop.WaitIndicator currentProgressBar = null;
+		//private ThreadingInterop.WaitIndicator currentProgressBar = null;
 		private bool InitialTopmost = false;
 		private void buttonPublishNow_Click(object sender, EventArgs e)
 		{
@@ -144,10 +205,18 @@ namespace PublishOwnApps
 				UserMessages.ShowWarningMessage("Please select a project name first.");
 			else
 			{
-				if (comboBoxProjectName.SelectedIndex == -1)
-					PublishApplication(new ApplicationToPublish(comboBoxProjectName.Text, checkBoxHasPlugins.Checked, checkBoxUpdateRevision.Checked, checkBoxAutoStartupWithWindows.Checked));
-				else
-					PublishApplication(comboBoxProjectName.SelectedItem as ApplicationToPublish);
+				TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.Indeterminate, this.Handle);
+				try
+				{
+					if (comboBoxProjectName.SelectedIndex == -1)
+						PublishApplication(new ApplicationToPublish(comboBoxProjectName.Text, checkBoxHasPlugins.Checked, checkBoxUpdateRevision.Checked, checkBoxAutoStartupWithWindows.Checked));
+					else
+						PublishApplication(comboBoxProjectName.SelectedItem as ApplicationToPublish);
+				}
+				finally
+				{
+					TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.NoProgress, this.Handle);
+				}
 			}
 		}
 
@@ -157,64 +226,73 @@ namespace PublishOwnApps
 				UserMessages.ShowInfoMessage("There is still an item in the combobox, click to add it to the list or clear it before continuing.");
 			else
 			{
-				foreach (TreeNode node in treeViewPublishList.Nodes)
-					PublishApplication(node.Tag as ApplicationToPublish);
+				TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.Indeterminate, this.Handle);
+				try
+				{
+					foreach (TreeNode node in treeViewPublishList.Nodes)
+						PublishApplication(node.Tag as ApplicationToPublish);
+				}
+				finally
+				{
+					TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.Indeterminate, this.Handle);
+				}
 			}
 		}
 
 		private bool BusyPublishing = false;
+		private const string ThisAppName = "PublishOwnApps";
 		private void PublishApplication(ApplicationToPublish apptoPublish)
 		{
 			InitialTopmost = this.TopMost;
 			this.TopMost = false;
-			using (ThreadingInterop.WaitIndicator wi = new ThreadingInterop.WaitIndicator(this))
+			//using (ThreadingInterop.WaitIndicator wi = new ThreadingInterop.WaitIndicator(this))
+			//{
+			if (BusyPublishing)
 			{
-				if (BusyPublishing)
-				{
-					UserMessages.ShowWarningMessage("Publishing is busy, please be patient...");
-					return;
-				}
-
-				BusyPublishing = true;
-
-				currentProgressBar = wi;
-				UpdateProgressBarPosition();
-
-				if (radioButtonLocal.Checked)
-				{
-					string tmpNoUseVersionStr;
-					VisualStudioInterop.PerformPublish(
-						textfeedbackSenderObject: this,
-						projName: apptoPublish.ApplicationName,//comboBoxProjectName.Text,
-						versionString: out tmpNoUseVersionStr,
-						HasPlugins: apptoPublish.HasPlugins,//checkBoxHasPlugins.Checked,
-						InstallLocallyAfterSuccessfullNSIS: checkBoxInstallLocally.Checked,
-						AutomaticallyUpdateRevision: true,//apptoPublish.UpdateRevisionNumber,//checkBoxUpdateRevision.Checked,
-						WriteIntoRegistryForWindowsAutostartup: apptoPublish.AutostartWithWindows,//checkBoxAutoStartupWithWindows.Checked,
-						textFeedbackEvent: textFeedbackEvent,
-						SelectInFolderAfterSuccessfullNSIS: checkBoxOpenFolder.Checked);
-				}
-				else if (radioButtonOnline.Checked)
-				{
-					VisualStudioInterop.PerformPublishOnline(
-							 textfeedbackSenderObject: this,
-							 projName: apptoPublish.ApplicationName,//comboBoxProjectName.Text,
-							 HasPlugins: apptoPublish.HasPlugins,//checkBoxHasPlugins.Checked,
-							 AutomaticallyUpdateRevision: true,//apptoPublish.UpdateRevisionNumber,//checkBoxUpdateRevision.Checked,
-							 OpenSetupFileAfterSuccessfullNSIS: checkBoxInstallLocally.Checked,
-							 WriteIntoRegistryForWindowsAutostartup: apptoPublish.AutostartWithWindows,//checkBoxAutoStartupWithWindows.Checked,
-							 textFeedbackEvent: textFeedbackEvent,
-							 progressChanged: progressChangedEvent,
-							 OpenFolderAfterSuccessfullNSIS: checkBoxOpenFolder.Checked,
-							 OpenWebsite: checkBoxOpenWebsite.Checked);
-				}
-				else
-					UserMessages.ShowWarningMessage("Please choose either local or online.");
-
-				BusyPublishing = false;
-
-				currentProgressBar = null;
+				UserMessages.ShowWarningMessage("Publishing is busy, please be patient...");
+				return;
 			}
+
+			BusyPublishing = true;
+
+			//currentProgressBar = wi;
+			//UpdateProgressBarPosition();
+
+			if (radioButtonLocal.Checked)
+			{
+				string tmpNoUseVersionStr;
+				VisualStudioInterop.PerformPublish(
+					textfeedbackSenderObject: this,
+					projName: apptoPublish.ApplicationName,//comboBoxProjectName.Text,
+					versionString: out tmpNoUseVersionStr,
+					HasPlugins: apptoPublish.HasPlugins,//checkBoxHasPlugins.Checked,
+					InstallLocallyAfterSuccessfullNSIS: checkBoxInstallLocally.Checked,
+					AutomaticallyUpdateRevision: true,//apptoPublish.UpdateRevisionNumber,//checkBoxUpdateRevision.Checked,
+					WriteIntoRegistryForWindowsAutostartup: apptoPublish.AutostartWithWindows,//checkBoxAutoStartupWithWindows.Checked,
+					textFeedbackEvent: textFeedbackEvent,
+					SelectSetupIfSuccessful: checkBoxOpenFolder.Checked);
+			}
+			else if (radioButtonOnline.Checked)
+			{
+				VisualStudioInterop.PerformPublishOnline(
+						 textfeedbackSenderObject: this,
+						 projName: apptoPublish.ApplicationName,//comboBoxProjectName.Text,
+						 HasPlugins: apptoPublish.HasPlugins,//checkBoxHasPlugins.Checked,
+						 AutomaticallyUpdateRevision: true,//apptoPublish.UpdateRevisionNumber,//checkBoxUpdateRevision.Checked,
+						 OpenSetupFileAfterSuccessfullNSIS: checkBoxInstallLocally.Checked,
+						 WriteIntoRegistryForWindowsAutostartup: apptoPublish.AutostartWithWindows,//checkBoxAutoStartupWithWindows.Checked,
+						 textFeedbackEvent: textFeedbackEvent,
+						 progressChanged: progressChangedEvent,
+						 OpenFolderAfterSuccessfullNSIS: checkBoxOpenFolder.Checked,
+						 OpenWebsite: checkBoxOpenWebsite.Checked);
+			}
+			else
+				UserMessages.ShowWarningMessage("Please choose either local or online.");
+
+			BusyPublishing = false;
+
+			//currentProgressBar = null;
+			//}
 			this.TopMost = InitialTopmost;
 		}
 
@@ -245,15 +323,15 @@ namespace PublishOwnApps
 
 		private void Form1_LocationChanged(object sender, EventArgs e)
 		{
-			UpdateProgressBarPosition();
+			//UpdateProgressBarPosition();
 		}
 
 		private void Form1_SizeChanged(object sender, EventArgs e)
 		{
-			UpdateProgressBarPosition();
+			//UpdateProgressBarPosition();
 		}
 
-		private void UpdateProgressBarPosition()
+		/*private void UpdateProgressBarPosition()
 		{
 			if (currentProgressBar != null)
 			{
@@ -266,15 +344,7 @@ namespace PublishOwnApps
 				}
 				catch { }
 			}
-		}
-
-		private void Form1_Shown(object sender, EventArgs e)
-		{
-			this.Cursor = Cursors.Default;
-			comboBoxProjectName.DroppedDown = true;
-			this.Cursor = Cursors.Default;
-			Application.DoEvents();
-		}
+		}*/
 
 		private void linkLabelAddToPublishList_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
