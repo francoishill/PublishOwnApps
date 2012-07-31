@@ -261,6 +261,10 @@
     <Compile Include="..\..\SharedClasses\WPFdraggableCanvas.cs">
       <Link>WPFdraggableCanvas.cs</Link>
     </Compile>
+    <Compile Include="..\..\SharedClasses\WpfNotificationWindow.xaml.cs">
+      <Link>WpfNotificationWindow.xaml.cs</Link>
+      <DependentUpon>WpfNotificationWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -353,6 +357,11 @@
   <ItemGroup>
     <Page Include="..\..\SharedClasses\CustomBalloonTipwpf.xaml">
       <Link>CustomBalloonTipwpf.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\..\SharedClasses\WpfNotificationWindow.xaml">
+      <Link>WpfNotificationWindow.xaml</Link>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
