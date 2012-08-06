@@ -264,6 +264,7 @@ namespace PublishOwnApps
 				VisualStudioInterop.PerformPublish(
 					textfeedbackSenderObject: this,
 					projName: apptoPublish.ApplicationName,//comboBoxProjectName.Text,
+					_64Only: false,//TODO: Not only 64bit
 					versionString: out tmpNoUseVersionStr,
 					HasPlugins: apptoPublish.HasPlugins,//checkBoxHasPlugins.Checked,
 					InstallLocallyAfterSuccessfullNSIS: checkBoxInstallLocally.Checked,
@@ -277,6 +278,7 @@ namespace PublishOwnApps
 				VisualStudioInterop.PerformPublishOnline(
 						 textfeedbackSenderObject: this,
 						 projName: apptoPublish.ApplicationName,//comboBoxProjectName.Text,
+						 _64Only: false,//Not only 64bit
 						 HasPlugins: apptoPublish.HasPlugins,//checkBoxHasPlugins.Checked,
 						 AutomaticallyUpdateRevision: true,//apptoPublish.UpdateRevisionNumber,//checkBoxUpdateRevision.Checked,
 						 OpenSetupFileAfterSuccessfullNSIS: checkBoxInstallLocally.Checked,

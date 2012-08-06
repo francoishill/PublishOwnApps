@@ -155,6 +155,9 @@
       <Link>MiniIndeterminateProgress.designer.cs</Link>
       <DependentUpon>MiniIndeterminateProgress.cs</DependentUpon>
     </Compile>
+    <Compile Include="..\..\SharedClasses\RegistryInterop.cs">
+      <Link>RegistryInterop.cs</Link>
+    </Compile>
     <Compile Include="..\..\SharedClasses\RichTextBoxEx.cs">
       <Link>RichTextBoxEx.cs</Link>
       <SubType>Component</SubType>
