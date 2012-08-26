@@ -166,7 +166,7 @@ namespace PublishOwnApps
 
 						richTextBoxExMessages.InsertLink(
 							displayPath,
-							EncodeAndDecodeInterop.EncodeStringHex(prefix + hyperlink));
+							EncodeAndDecodeInterop.EncodeStringHex(prefix + hyperlink, err => UserMessages.ShowErrorMessage(err)));
 
 						richTextBoxExMessages.AppendText(msgAfter);
 					}
