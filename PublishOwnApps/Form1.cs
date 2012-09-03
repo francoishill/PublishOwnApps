@@ -181,15 +181,25 @@ namespace PublishOwnApps
 				action();
 		}
 
+		private void SetWindows7progress(int currentValue, int maximumValue)
+		{
+			TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.Normal);
+			TaskbarManager.Instance.SetProgressValue(currentValue, maximumValue);
+		}
+
 		private void OnProgressChangedEvent(object sender, ProgressChangedEventArgs e)
 		{
 			Action action = new Action(
 				delegate
 				{
+					SetWindows7progress(e.CurrentValue, e.MaximumValue);
 					progressBar.Maximum = e.MaximumValue;
 					progressBar.Value = e.CurrentValue;
 					if (progressBar.Maximum == progressBar.Value)
+					{
 						progressBar.Value = 0;
+						SetWindows7progress(0, e.MaximumValue);
+					}
 				});
 			if (this.InvokeRequired)
 				this.Invoke(action);
@@ -234,7 +244,7 @@ namespace PublishOwnApps
 				}
 				finally
 				{
-					TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.Indeterminate, this.Handle);
+					TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.NoProgress, this.Handle);
 				}
 			}
 		}
@@ -265,7 +275,7 @@ namespace PublishOwnApps
 					textfeedbackSenderObject: this,
 					projName: apptoPublish.ApplicationName,//comboBoxProjectName.Text,
 					_64Only: false,//TODO: Not only 64bit
-					versionString: out tmpNoUseVersionStr,
+					publishedVersionString: out tmpNoUseVersionStr,
 					HasPlugins: apptoPublish.HasPlugins,//checkBoxHasPlugins.Checked,
 					InstallLocallyAfterSuccessfullNSIS: checkBoxInstallLocally.Checked,
 					AutomaticallyUpdateRevision: true,//apptoPublish.UpdateRevisionNumber,//checkBoxUpdateRevision.Checked,
