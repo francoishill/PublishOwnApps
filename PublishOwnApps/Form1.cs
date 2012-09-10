@@ -62,7 +62,7 @@ namespace PublishOwnApps
 							"ApplicationManager", "MonitorSystem", "QuickAccess", "StartupTodoManager", "TestingMonitorSubversion")
 						));
 
-				string appnameWithSpaces = VisualStudioInterop.InsertSpacesBeforeCamelCase(appname);
+				string appnameWithSpaces = appname.InsertSpacesBeforeCamelCase();
 				string appExePath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86).TrimEnd('\\') + string.Format("\\{0}\\{1}.exe", appnameWithSpaces, appname);
 				JumpListLink actionPublishQuickAccess = new JumpListLink(Assembly.GetEntryAssembly().Location, appnameWithSpaces);
 				actionPublishQuickAccess.Arguments = appname;
@@ -271,32 +271,88 @@ namespace PublishOwnApps
 			if (radioButtonLocal.Checked)
 			{
 				string tmpNoUseVersionStr;
-				VisualStudioInterop.PerformPublish(
-					textfeedbackSenderObject: this,
-					projName: apptoPublish.ApplicationName,//comboBoxProjectName.Text,
+				string tmpNoUseSetupPath;
+				bool publishResult = PublishInterop.PerformPublish(
+					projName: apptoPublish.ApplicationName,
 					_64Only: false,//TODO: Not only 64bit
-					publishedVersionString: out tmpNoUseVersionStr,
-					HasPlugins: apptoPublish.HasPlugins,//checkBoxHasPlugins.Checked,
-					InstallLocallyAfterSuccessfullNSIS: checkBoxInstallLocally.Checked,
+					HasPlugins: apptoPublish.HasPlugins,
 					AutomaticallyUpdateRevision: true,//apptoPublish.UpdateRevisionNumber,//checkBoxUpdateRevision.Checked,
-					WriteIntoRegistryForWindowsAutostartup: apptoPublish.AutostartWithWindows,//checkBoxAutoStartupWithWindows.Checked,
-					textFeedbackEvent: textFeedbackEvent,
-					SelectSetupIfSuccessful: checkBoxOpenFolder.Checked);
+					InstallLocallyAfterSuccessfullNSIS: checkBoxInstallLocally.Checked,
+					StartupWithWindows: apptoPublish.AutostartWithWindows,
+					SelectSetupIfSuccessful: checkBoxOpenFolder.Checked,
+					publishedVersionString: out tmpNoUseVersionStr,
+					publishedSetupPath: out tmpNoUseSetupPath,
+					actionOnMessage: (mes, msgtype) =>
+					{
+						TextFeedbackType tmpFeedbackType = TextFeedbackType.Subtle;
+						switch (msgtype)
+						{
+							case FeedbackMessageTypes.Success:
+								tmpFeedbackType = TextFeedbackType.Success;
+								break;
+							case FeedbackMessageTypes.Error:
+								tmpFeedbackType = TextFeedbackType.Error;
+								break;
+							case FeedbackMessageTypes.Warning:
+								tmpFeedbackType = TextFeedbackType.Noteworthy;
+								break;
+							case FeedbackMessageTypes.Status:
+								tmpFeedbackType = TextFeedbackType.Subtle;
+								break;
+						}
+						OnTextFeedbackEvent(null, new TextFeedbackEventArgs(mes, tmpFeedbackType));
+					},
+					actionOnProgressPercentage: (progperc) =>
+					{
+						OnProgressChangedEvent(null, new ProgressChangedEventArgs(progperc, 100));
+					});//Only used when downloading DotNetChecker.dll
+
+				if (!publishResult)
+					OnTextFeedbackEvent(null, new TextFeedbackEventArgs("UNABLE to publish " + apptoPublish.ApplicationName, TextFeedbackType.Error));
 			}
 			else if (radioButtonOnline.Checked)
 			{
-				VisualStudioInterop.PerformPublishOnline(
-						 textfeedbackSenderObject: this,
-						 projName: apptoPublish.ApplicationName,//comboBoxProjectName.Text,
-						 _64Only: false,//Not only 64bit
-						 HasPlugins: apptoPublish.HasPlugins,//checkBoxHasPlugins.Checked,
-						 AutomaticallyUpdateRevision: true,//apptoPublish.UpdateRevisionNumber,//checkBoxUpdateRevision.Checked,
-						 OpenSetupFileAfterSuccessfullNSIS: checkBoxInstallLocally.Checked,
-						 WriteIntoRegistryForWindowsAutostartup: apptoPublish.AutostartWithWindows,//checkBoxAutoStartupWithWindows.Checked,
-						 textFeedbackEvent: textFeedbackEvent,
-						 progressChanged: progressChangedEvent,
-						 OpenFolderAfterSuccessfullNSIS: checkBoxOpenFolder.Checked,
-						 OpenWebsite: checkBoxOpenWebsite.Checked);
+				string tmpNoUsePublishedVersionString;
+				string tmpNoUsePublishedSetupPath;
+
+				bool publishResult = PublishInterop.PerformPublishOnline(
+					projName: apptoPublish.ApplicationName,
+					_64Only: false,//Not only 64bit
+					HasPlugins: apptoPublish.HasPlugins,
+					AutomaticallyUpdateRevision: true,//apptoPublish.UpdateRevisionNumber,//checkBoxUpdateRevision.Checked,
+					InstallLocallyAfterSuccessfullNSIS: checkBoxInstallLocally.Checked,
+					StartupWithWindows: apptoPublish.AutostartWithWindows,
+					SelectSetupIfSuccessful: checkBoxOpenFolder.Checked,
+					OpenWebsite: checkBoxOpenWebsite.Checked,
+					publishedVersionString: out tmpNoUsePublishedVersionString,
+					publishedSetupPath: out tmpNoUsePublishedSetupPath,
+					actionOnMessage: (mes, msgtype) =>
+					{
+						TextFeedbackType tmpFeedbackType = TextFeedbackType.Subtle;
+						switch (msgtype)
+						{
+							case FeedbackMessageTypes.Success:
+								tmpFeedbackType = TextFeedbackType.Success;
+								break;
+							case FeedbackMessageTypes.Error:
+								tmpFeedbackType = TextFeedbackType.Error;
+								break;
+							case FeedbackMessageTypes.Warning:
+								tmpFeedbackType = TextFeedbackType.Noteworthy;
+								break;
+							case FeedbackMessageTypes.Status:
+								tmpFeedbackType = TextFeedbackType.Subtle;
+								break;
+						}
+						OnTextFeedbackEvent(null, new TextFeedbackEventArgs(mes, tmpFeedbackType));
+					},
+					actionOnProgressPercentage: (progperc) =>
+					{
+						OnProgressChangedEvent(null, new ProgressChangedEventArgs(progperc, 100));
+					});
+
+				if (!publishResult)
+					OnTextFeedbackEvent(null, new TextFeedbackEventArgs("UNABLE to publish " + apptoPublish.ApplicationName, TextFeedbackType.Error));
 			}
 			else
 				UserMessages.ShowWarningMessage("Please choose either local or online.");

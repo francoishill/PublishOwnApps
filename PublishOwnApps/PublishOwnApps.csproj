@@ -197,6 +197,9 @@
     <Compile Include="..\..\SharedClasses\StylingInterop.cs">
       <Link>StylingInterop.cs</Link>
     </Compile>
+    <Compile Include="..\..\SharedClasses\UploadingProtocolTypesEnum.cs">
+      <Link>UploadingProtocolTypesEnum.cs</Link>
+    </Compile>
     <Compile Include="..\..\SharedClasses\UserMessages.cs">
       <Link>UserMessages.cs</Link>
       <SubType>Form</SubType>
@@ -266,9 +269,6 @@
     </Compile>
     <Compile Include="..\..\SharedClasses\TracXmlRpcInterop.cs">
       <Link>TracXmlRpcInterop.cs</Link>
-    </Compile>
-    <Compile Include="..\..\SharedClasses\VisualStudioInterop.cs">
-      <Link>VisualStudioInterop.cs</Link>
     </Compile>
     <Compile Include="..\..\SharedClasses\WebInterop.cs">
       <Link>WebInterop.cs</Link>
