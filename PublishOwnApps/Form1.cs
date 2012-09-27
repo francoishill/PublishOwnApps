@@ -51,7 +51,7 @@ namespace PublishOwnApps
 
 			//foreach (string item in GlobalSettings.PublishSettings.Instance.ListedApplicationNames.Split('|').OrderBy(s => s))
 			int listcnt = 0;
-			foreach (string appname in OnlineSettings.PublishSettings.Instance.ListedApplicationNames.OrderBy(s => s))
+			foreach (string appname in SettingsSimple.PublishSettings.Instance.ListedApplicationNames.OrderBy(s => s))
 			{
 				comboBoxProjectName.Items.Add(
 					new ApplicationToPublish(

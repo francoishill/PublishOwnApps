@@ -170,6 +170,9 @@
     <Compile Include="..\..\SharedClasses\FeedbackMessageTypes.cs">
       <Link>FeedbackMessageTypes.cs</Link>
     </Compile>
+    <Compile Include="..\..\SharedClasses\Generics.cs">
+      <Link>Generics.cs</Link>
+    </Compile>
     <Compile Include="..\..\SharedClasses\MiniIndeterminateProgress.cs">
       <Link>MiniIndeterminateProgress.cs</Link>
       <SubType>Form</SubType>
@@ -187,6 +190,9 @@
     <Compile Include="..\..\SharedClasses\RichTextBoxEx.cs">
       <Link>RichTextBoxEx.cs</Link>
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="..\..\SharedClasses\SettingsSimple.cs">
+      <Link>SettingsSimple.cs</Link>
     </Compile>
     <Compile Include="..\..\SharedClasses\ShowNoCallbackNotificationInterop.cs">
       <Link>ShowNoCallbackNotificationInterop.cs</Link>
