@@ -179,6 +179,9 @@
     <Compile Include="..\..\SharedClasses\Generics.cs">
       <Link>Generics.cs</Link>
     </Compile>
+    <Compile Include="..\..\SharedClasses\Helpers.cs">
+      <Link>Helpers.cs</Link>
+    </Compile>
     <Compile Include="..\..\SharedClasses\MiniIndeterminateProgress.cs">
       <Link>MiniIndeterminateProgress.cs</Link>
       <SubType>Form</SubType>
