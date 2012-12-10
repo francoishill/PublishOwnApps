@@ -173,6 +173,9 @@
     <Compile Include="..\..\SharedClasses\CompareObjects.cs">
       <Link>CompareObjects.cs</Link>
     </Compile>
+    <Compile Include="..\..\SharedClasses\EncryptionInterop.cs">
+      <Link>EncryptionInterop.cs</Link>
+    </Compile>
     <Compile Include="..\..\SharedClasses\FeedbackMessageTypes.cs">
       <Link>FeedbackMessageTypes.cs</Link>
     </Compile>
@@ -181,6 +184,9 @@
     </Compile>
     <Compile Include="..\..\SharedClasses\Helpers.cs">
       <Link>Helpers.cs</Link>
+    </Compile>
+    <Compile Include="..\..\SharedClasses\LicensingInterop_Shared.cs">
+      <Link>LicensingInterop_Shared.cs</Link>
     </Compile>
     <Compile Include="..\..\SharedClasses\MiniIndeterminateProgress.cs">
       <Link>MiniIndeterminateProgress.cs</Link>
@@ -192,6 +198,9 @@
     </Compile>
     <Compile Include="..\..\SharedClasses\NetworkInteropSimple.cs">
       <Link>NetworkInteropSimple.cs</Link>
+    </Compile>
+    <Compile Include="..\..\SharedClasses\PhpInterop.cs">
+      <Link>PhpInterop.cs</Link>
     </Compile>
     <Compile Include="..\..\SharedClasses\ReflectionInterop.cs">
       <Link>ReflectionInterop.cs</Link>
