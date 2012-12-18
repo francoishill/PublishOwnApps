@@ -24,12 +24,16 @@ namespace PublishOwnApps
 				|| UserMessages.Confirm("Due to missing DLLs, application will not be able to do online publishing, continue withouth this support?"))
 #endif
 			Form1 mainform = new Form1();
-			SharedClasses.AutoUpdating.CheckForUpdates(
+			SharedClasses.AutoUpdating.CheckForUpdates_ExceptionHandler(delegate
+			{
+				ThreadingInterop.UpdateGuiFromThread(mainform, () => mainform.Text += " (up to date version " + SharedClasses.AutoUpdating.GetThisAppVersionString() + ")");
+			});
+			/*SharedClasses.AutoUpdating.CheckForUpdates(
 				//SharedClasses.AutoUpdatingForm.CheckForUpdates(
 				//exitApplicationAction: delegate { Application.Exit(); },
 				ActionIfUptoDate_Versionstring: (versionstring) => ThreadingInterop.UpdateGuiFromThread(mainform, () => mainform.Text += " (up to date version " + versionstring + ")"),
 				ActionOnError: (errmsg) => ThreadingInterop.UpdateGuiFromThread(mainform, () => mainform.Text += " (" + errmsg + ")"));//,
-				//ActionIfUnableToCheckForUpdates: (errmsg) => ThreadingInterop.UpdateGuiFromThread(mainform, () => mainform.Text += " (" + errmsg + ")"));
+				//ActionIfUnableToCheckForUpdates: (errmsg) => ThreadingInterop.UpdateGuiFromThread(mainform, () => mainform.Text += " (" + errmsg + ")"));*/
 
 			Application.Run(mainform);
 		}
