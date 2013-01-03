@@ -1,6 +1,6 @@
 ﻿namespace PublishOwnApps
 {
-	partial class Form1
+	partial class MainForm
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -29,7 +29,7 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
 			this.radioButtonLocal = new System.Windows.Forms.RadioButton();
 			this.radioButtonOnline = new System.Windows.Forms.RadioButton();
 			this.buttonPublishNow = new System.Windows.Forms.Button();
@@ -48,6 +48,7 @@
 			this.checkBoxOpenWebsite = new System.Windows.Forms.CheckBox();
 			this.checkBoxTopmost = new System.Windows.Forms.CheckBox();
 			this.richTextBoxExMessages = new SharedClasses.RichTextBoxEx();
+			this.labelAbout = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// radioButtonLocal
@@ -260,11 +261,24 @@
 			this.richTextBoxExMessages.WordWrap = false;
 			this.richTextBoxExMessages.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.richTextBoxExMessages_LinkClicked);
 			// 
-			// Form1
+			// labelAbout
+			// 
+			this.labelAbout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.labelAbout.AutoSize = true;
+			this.labelAbout.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.labelAbout.Location = new System.Drawing.Point(833, 430);
+			this.labelAbout.Name = "labelAbout";
+			this.labelAbout.Size = new System.Drawing.Size(35, 13);
+			this.labelAbout.TabIndex = 19;
+			this.labelAbout.Text = "&About";
+			this.labelAbout.Click += new System.EventHandler(this.labelAbout_Click);
+			// 
+			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(880, 452);
+			this.Controls.Add(this.labelAbout);
 			this.Controls.Add(this.richTextBoxExMessages);
 			this.Controls.Add(this.checkBoxTopmost);
 			this.Controls.Add(this.checkBoxOpenWebsite);
@@ -284,7 +298,7 @@
 			this.Controls.Add(this.buttonPublishNow);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
-			this.Name = "Form1";
+			this.Name = "MainForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Publish application";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
@@ -317,6 +331,7 @@
 		private System.Windows.Forms.CheckBox checkBoxOpenWebsite;
         private System.Windows.Forms.CheckBox checkBoxTopmost;
         private SharedClasses.RichTextBoxEx richTextBoxExMessages;
+		private System.Windows.Forms.Label labelAbout;
 	}
 }
 
