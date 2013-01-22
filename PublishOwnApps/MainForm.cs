@@ -124,7 +124,7 @@ namespace PublishOwnApps
 		{
 			TaskbarManager.Instance.ApplicationId = ThisAppName;
 
-			OnTextFeedbackEvent(null, new TextFeedbackEventArgs("Hallo my name is Francois Hill", TextFeedbackType.Subtle, new Range(17, 8, Range.LinkTypes.OpenUrl)));
+			//OnTextFeedbackEvent(null, new TextFeedbackEventArgs("Hallo my name is Francois Hill", TextFeedbackType.Subtle, new Range(17, 8, Range.LinkTypes.OpenUrl)));
 		}
 
 		private void Form1_Shown(object sender, EventArgs e)
