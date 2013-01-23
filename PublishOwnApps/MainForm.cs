@@ -276,7 +276,7 @@ namespace PublishOwnApps
 				string tmpNoUseSetupPath;
 				bool publishResult = PublishInterop.PerformPublish(
 					projName: apptoPublish.ApplicationName,
-					_64Only: false,//TODO: Not only 64bit
+					_64Only: false,
 					HasPlugins: apptoPublish.HasPlugins,
 					AutomaticallyUpdateRevision: true,//apptoPublish.UpdateRevisionNumber,//checkBoxUpdateRevision.Checked,
 					InstallLocallyAfterSuccessfullNSIS: checkBoxInstallLocally.Checked,
