@@ -274,6 +274,7 @@ namespace PublishOwnApps
 			{
 				string tmpNoUseVersionStr;
 				string tmpNoUseSetupPath;
+				DateTime publishedDate;
 				bool publishResult = PublishInterop.PerformPublish(
 					projName: apptoPublish.ApplicationName,
 					_64Only: false,
@@ -284,6 +285,7 @@ namespace PublishOwnApps
 					SelectSetupIfSuccessful: checkBoxOpenFolder.Checked,
 					publishedVersionString: out tmpNoUseVersionStr,
 					publishedSetupPath: out tmpNoUseSetupPath,
+					publishDate: out publishedDate,
 					actionOnMessage: (mes, msgtype) =>
 					{
 						TextFeedbackType tmpFeedbackType = TextFeedbackType.Subtle;
@@ -316,6 +318,7 @@ namespace PublishOwnApps
 			{
 				string tmpNoUsePublishedVersionString;
 				string tmpNoUsePublishedSetupPath;
+				DateTime publishedDate;
 
 				bool publishResult = PublishInterop.PerformPublishOnline(
 					projName: apptoPublish.ApplicationName,
@@ -328,6 +331,7 @@ namespace PublishOwnApps
 					OpenWebsite: checkBoxOpenWebsite.Checked,
 					publishedVersionString: out tmpNoUsePublishedVersionString,
 					publishedSetupPath: out tmpNoUsePublishedSetupPath,
+					publishDate: out publishedDate,
 					actionOnMessage: (mes, msgtype) =>
 					{
 						TextFeedbackType tmpFeedbackType = TextFeedbackType.Subtle;
