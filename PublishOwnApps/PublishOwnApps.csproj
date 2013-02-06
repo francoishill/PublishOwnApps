@@ -170,9 +170,6 @@
       <Link>RichTextBoxEx.cs</Link>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="..\..\SharedClasses\StringExtensions.cs">
-      <Link>StringExtensions.cs</Link>
-    </Compile>
     <Compile Include="..\..\SharedClasses\StylingInterop.cs">
       <Link>StylingInterop.cs</Link>
     </Compile>
