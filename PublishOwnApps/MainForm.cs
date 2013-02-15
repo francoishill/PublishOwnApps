@@ -276,7 +276,7 @@ namespace PublishOwnApps
 				string tmpNoUseSetupPath;
 				DateTime publishedDate;
 				bool publishResult = PublishInterop.PerformPublish(
-					projName: apptoPublish.ApplicationName,
+					projToBuild: new VsBuildProject_NonAbstract(apptoPublish.ApplicationName),
 					/*_64Only: false,*/
 					HasPlugins: apptoPublish.HasPlugins,
 					AutomaticallyUpdateRevision: true,//apptoPublish.UpdateRevisionNumber,//checkBoxUpdateRevision.Checked,
@@ -321,7 +321,7 @@ namespace PublishOwnApps
 				DateTime publishedDate;
 
 				bool publishResult = PublishInterop.PerformPublishOnline(
-					projName: apptoPublish.ApplicationName,
+					projToBuild: new VsBuildProject_NonAbstract(apptoPublish.ApplicationName),
 					_64Only: false,//Not only 64bit
 					HasPlugins: apptoPublish.HasPlugins,
 					AutomaticallyUpdateRevision: true,//apptoPublish.UpdateRevisionNumber,//checkBoxUpdateRevision.Checked,
