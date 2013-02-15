@@ -280,7 +280,7 @@ namespace PublishOwnApps
 					/*_64Only: false,*/
 					HasPlugins: apptoPublish.HasPlugins,
 					AutomaticallyUpdateRevision: true,//apptoPublish.UpdateRevisionNumber,//checkBoxUpdateRevision.Checked,
-					InstallLocallyAfterSuccessfullNSIS: checkBoxInstallLocally.Checked,
+					InstallLocallyAfterSuccessfullNSIS_NullToNotRunAfterInstallingSilently: checkBoxInstallLocally.Checked,
 					StartupWithWindows: apptoPublish.AutostartWithWindows,
 					SelectSetupIfSuccessful: checkBoxOpenFolder.Checked,
 					publishedVersionString: out tmpNoUseVersionStr,
@@ -325,7 +325,7 @@ namespace PublishOwnApps
 					_64Only: false,//Not only 64bit
 					HasPlugins: apptoPublish.HasPlugins,
 					AutomaticallyUpdateRevision: true,//apptoPublish.UpdateRevisionNumber,//checkBoxUpdateRevision.Checked,
-					InstallLocallyAfterSuccessfullNSIS: checkBoxInstallLocally.Checked,
+					InstallLocallyAfterSuccessfullNSIS_NullToNotRunAfterInstallingSilently: checkBoxInstallLocally.Checked,
 					StartupWithWindows: apptoPublish.AutostartWithWindows,
 					SelectSetupIfSuccessful: checkBoxOpenFolder.Checked,
 					OpenWebsite: checkBoxOpenWebsite.Checked,
